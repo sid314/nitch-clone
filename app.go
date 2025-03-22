@@ -48,16 +48,16 @@ func main() {
 	freememinmebibytes := freememinkilobytes / 1024
 	usedmeminmebibytes := totalmeminmebibytes - freememinmebibytes
 	dot := ""
-	fmt.Println("╭───────────────╮")
-	fmt.Println("│", yellow, " ", stop, "user     │", red, username, stop)
-	fmt.Println("│", yellow, "|>", stop, "hname    │", yellow, hostname, stop)
-	fmt.Println("│", green, "󰻀", stop, " distro   │", green, distroname[1], stop)
-	fmt.Print("│", green, "  󰌢 ", stop, "  kernel   │  ", blue, kernel, stop)
-	fmt.Print("│", blue, "   ", stop, "  uptime   │  ", red, uptime, stop)
-	fmt.Println("│", blue, " ", stop, "shell    │", yellow, shell, stop)
-	fmt.Print("│", red, "  󰏖 ", stop, "  packages │  ", green, packages, stop)
-	fmt.Println("│", red, "󰍛 ", stop, "mem      │", blue, usedmeminmebibytes, "|", totalmeminmebibytes, "MiB", stop)
-	fmt.Println("├───────────────┤")
-	fmt.Println("│  󰏘  colors    │", grey, dot, stop, red, dot, stop, yellow, dot, stop, green, dot, stop, teal, dot, stop, blue, dot, stop, pink, dot, stop, black, dot, stop)
-	fmt.Println("╰───────────────╯")
+	fmt.Println("╭─────────────╮")
+	fmt.Println("│", yellow, " ", stop, "user   │", red, username, stop)
+	fmt.Println("│", yellow, "|>", stop, "hname  │", yellow, hostname, stop)
+	fmt.Println("│", green, "󰻀", stop, " distro │", green, distroname[1], stop)
+	fmt.Print("│", green, "  󰌢 ", stop, "  kernel │  ", blue, kernel, stop)
+	fmt.Print("│", blue, "   ", stop, "  uptime │  ", red, uptime, stop)
+	fmt.Println("│", blue, " ", stop, "shell  │", yellow, shell, stop)
+	fmt.Print("│", red, "  󰏖 ", stop, "  pkgs   │  ", green, packages, stop)
+	fmt.Println("│", red, "󰍛 ", stop, "mem    │", blue, usedmeminmebibytes, "|", totalmeminmebibytes, "MiB", stop)
+	fmt.Println("├─────────────┤")
+	fmt.Println("│  󰏘  colors  │", grey, dot, red, dot, yellow, dot, green, dot, teal, dot, blue, dot, pink, dot, black, dot, stop)
+	fmt.Println("╰─────────────╯")
 }
