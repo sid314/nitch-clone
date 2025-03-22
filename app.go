@@ -49,8 +49,8 @@ func main() {
 	usedmeminmebibytes := totalmeminmebibytes - freememinmebibytes
 	dot := ""
 	fmt.Println("╭───────────╮")
-	fmt.Println("│", yellow, " ", stop, "user   │", red, username, stop)
-	fmt.Println("│", yellow, " ", stop, "hname  │", yellow, hostname, stop)
+	fmt.Println("│", teal, " ", stop, "user   │", red, username, stop)
+	fmt.Println("│", teal, " ", stop, "hname  │", yellow, hostname, stop)
 	fmt.Println("│", green, " ", stop, "distro │", green, distroname[1], stop)
 	fmt.Print("│ ", green, " 󰌢 ", stop, "  kernel │  ", blue, kernel, stop)
 	fmt.Print("│ ", blue, "  ", stop, "  uptime │  ", red, uptime, stop)
