@@ -20,7 +20,7 @@ func main() {
 		teal   = "\033[96m\b"
 		grey   = "\033[97m\b"
 		black  = "\033[30m\b"
-		stop   = "\033[0\bm"
+		stop   = "\033[0m\b"
 	)
 	hostname, _ := os.Hostname()
 	user, _ := user.Current()
