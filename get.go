@@ -58,7 +58,7 @@ func getRawTotalMemory() int {
 func getRawFreeMemory() int {
 	meminfobytes, _ := os.ReadFile("/proc/meminfo")
 	meminfostring := string(meminfobytes)
-	totalmemorystring := SnipSnip("MemFree:", " kB", meminfostring)
+	totalmemorystring := SnipSnip("MemAvailable:", " kB", meminfostring)
 	totalmemorystring = strings.TrimSpace(totalmemorystring)
 	totalrawmemory, _ := strconv.Atoi(totalmemorystring)
 	return totalrawmemory
