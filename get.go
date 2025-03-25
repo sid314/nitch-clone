@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"os"
+	"os/exec"
 	"os/user"
+	"strconv"
 	"strings"
-
-	"github.com/benhoyt/goawk/interp"
 )
 
 func GetHostName() string {
@@ -19,13 +18,57 @@ func GetUserName() string {
 	return user.Username
 }
 
-func GetOS() string {
-	var builder strings.Builder
+func GetDistro() string {
 	osReleaseBytes, _ := os.ReadFile("/etc/os-release")
-	reader := strings.NewReader(string(osReleaseBytes))
-	err := interp.Exec("'/PRETTY_NAME/ {print $2}'", "=", reader, &builder)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	return builder.String()
+	osrelease := string(osReleaseBytes)
+	return SnipSnip("PRETTY_NAME=\"", "\"", osrelease)
+}
+
+func GetKernel() string {
+	kernelbytes, _ := exec.Command("uname", "-r").Output()
+	return string(kernelbytes)
+}
+
+func GetUptime() string {
+	uptimebytes, _ := exec.Command("uptime", "-p").Output()
+	uptime := string(uptimebytes)
+	uptime = strings.ReplaceAll(uptime, "minutes", "m")
+	uptime = strings.ReplaceAll(uptime, "hours", "h")
+	uptime = strings.ReplaceAll(uptime, "days", "d")
+	uptime = strings.ReplaceAll(uptime, "minute", "m")
+	uptime = strings.ReplaceAll(uptime, "hour", "h")
+	uptime = strings.ReplaceAll(uptime, "day", "d")
+	return uptime
+}
+
+func GetShell() string {
+	shellpieces := strings.SplitAfter(os.Getenv("SHELL"), "/")
+	return shellpieces[len(shellpieces)-1]
+}
+
+func getRawTotalMemory() int {
+	meminfobytes, _ := os.ReadFile("/proc/meminfo")
+	meminfostring := string(meminfobytes)
+	totalmemorystring := SnipSnip("MemTotal:", " kB", meminfostring)
+	totalmemorystring = strings.TrimSpace(totalmemorystring)
+	totalrawmemory, _ := strconv.Atoi(totalmemorystring)
+	return totalrawmemory
+}
+
+func getRawFreeMemory() int {
+	meminfobytes, _ := os.ReadFile("/proc/meminfo")
+	meminfostring := string(meminfobytes)
+	totalmemorystring := SnipSnip("MemFree:", " kB", meminfostring)
+	totalmemorystring = strings.TrimSpace(totalmemorystring)
+	totalrawmemory, _ := strconv.Atoi(totalmemorystring)
+	return totalrawmemory
+}
+
+func GetTotalMemory() int {
+	return getRawTotalMemory() / 1024
+}
+
+func GetUsedMemory() int {
+	rawfreememory := getRawTotalMemory() - getRawFreeMemory()
+	return rawfreememory / 1024
 }
