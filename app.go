@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 )
 
 func main() {
@@ -16,6 +17,24 @@ func main() {
 		black  = "\033[30m\b"
 		stop   = "\033[0m\b"
 	)
+	colornames := [8]string{}
+	for i := range len(colornames) {
+		colorindex := rand.Int31n(6)
+		switch colorindex {
+		case 1:
+			colornames[i] = yellow
+		case 2:
+			colornames[i] = red
+		case 3:
+			colornames[i] = green
+		case 4:
+			colornames[i] = blue
+		case 5:
+			colornames[i] = pink
+		default:
+			colornames[i] = teal
+		}
+	}
 	hostname := GetHostName()
 	username := GetUserName()
 	distroname := GetDistro()
@@ -28,14 +47,14 @@ func main() {
 
 	dot := ""
 	fmt.Println("╭───────────╮")
-	fmt.Println("│", teal, " ", stop, "user   │", red, username, stop)
-	fmt.Println("│", teal, " ", stop, "hname  │", yellow, hostname, stop)
-	fmt.Println("│", green, " ", stop, "distro │", green, distroname, stop)
-	fmt.Print("│ ", green, " 󰌢 ", stop, "  kernel │  ", blue, kernel, stop)
-	fmt.Print("│ ", blue, "  ", stop, "  uptime │  ", red, uptime, stop)
-	fmt.Println("│", blue, " ", stop, "shell  │", yellow, shell, stop)
-	fmt.Println("│", red, "󰏖 ", stop, "pkgs   │", green, packages, stop)
-	fmt.Println("│", red, "󰍛 ", stop, "mem    │", blue, usedmem, "|", totalmem, "MiB", stop)
+	fmt.Println("│", teal, " ", stop, "user   │", colornames[0], username, stop)
+	fmt.Println("│", teal, " ", stop, "hname  │", colornames[1], hostname, stop)
+	fmt.Println("│", green, " ", stop, "distro │", colornames[2], distroname, stop)
+	fmt.Print("│ ", green, " 󰌢 ", stop, "  kernel │  ", colornames[3], kernel, stop)
+	fmt.Print("│ ", blue, "  ", stop, "  uptime │  ", colornames[4], uptime, stop)
+	fmt.Println("│", blue, " ", stop, "shell  │", colornames[5], shell, stop)
+	fmt.Println("│", red, "󰏖 ", stop, "pkgs   │", colornames[6], packages, stop)
+	fmt.Println("│", red, "󰍛 ", stop, "mem    │", colornames[7], usedmem, "|", totalmem, "MiB", stop)
 	fmt.Println("├───────────┤")
 	fmt.Println("│ 󰏘  colors │", grey, dot, red, dot, yellow, dot, green, dot, teal, dot, blue, dot, pink, dot, black, dot, stop)
 	fmt.Println("╰───────────╯")
