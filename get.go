@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"os/exec"
 	"os/user"
@@ -9,28 +10,49 @@ import (
 )
 
 func GetHostName() string {
-	hostname, _ := os.Hostname()
+	hostname, error := os.Hostname()
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	return hostname
 }
 
 func GetUserName() string {
-	user, _ := user.Current()
+	user, error := user.Current()
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	return user.Username
 }
 
 func GetDistro() string {
-	osReleaseBytes, _ := os.ReadFile("/etc/os-release")
+	osReleaseBytes, error := os.ReadFile("/etc/os-release")
+
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	osrelease := string(osReleaseBytes)
 	return SnipSnip("PRETTY_NAME=\"", "\"", osrelease)
 }
 
 func GetKernel() string {
-	kernelbytes, _ := exec.Command("uname", "-r").Output()
+	kernelbytes, error := exec.Command("uname", "-r").Output()
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	return string(kernelbytes)
 }
 
 func GetUptime() string {
-	uptimebytes, _ := exec.Command("uptime", "-p").Output()
+	uptimebytes, error := exec.Command("uptime", "-p").Output()
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	uptime := string(uptimebytes)
 	uptime = strings.ReplaceAll(uptime, "minutes", "m")
 	uptime = strings.ReplaceAll(uptime, "hours", "h")
@@ -47,20 +69,36 @@ func GetShell() string {
 }
 
 func getRawTotalMemory() int {
-	meminfobytes, _ := os.ReadFile("/proc/meminfo")
+	meminfobytes, error := os.ReadFile("/proc/meminfo")
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	meminfostring := string(meminfobytes)
 	totalmemorystring := SnipSnip("MemTotal:", " kB", meminfostring)
 	totalmemorystring = strings.TrimSpace(totalmemorystring)
-	totalrawmemory, _ := strconv.Atoi(totalmemorystring)
+	totalrawmemory, error := strconv.Atoi(totalmemorystring)
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	return totalrawmemory
 }
 
 func getRawFreeMemory() int {
-	meminfobytes, _ := os.ReadFile("/proc/meminfo")
+	meminfobytes, error := os.ReadFile("/proc/meminfo")
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	meminfostring := string(meminfobytes)
 	totalmemorystring := SnipSnip("MemAvailable:", " kB", meminfostring)
 	totalmemorystring = strings.TrimSpace(totalmemorystring)
-	totalrawmemory, _ := strconv.Atoi(totalmemorystring)
+	totalrawmemory, error := strconv.Atoi(totalmemorystring)
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	return totalrawmemory
 }
 
@@ -69,7 +107,11 @@ func GetTotalMemory() int {
 }
 
 func GetPackages() int {
-	packagesbytes, _ := exec.Command("pacman", "-Q").Output()
+	packagesbytes, error := exec.Command("pacman", "-Q").Output()
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	packages := string(packagesbytes)
 	lines := strings.Count(packages, "\n")
 	return lines
