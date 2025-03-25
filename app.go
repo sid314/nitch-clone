@@ -35,7 +35,7 @@ func main() {
 	fmt.Println("│", green, " ", stop, "distro │", green, distroname, stop)
 	fmt.Print("│ ", green, " 󰌢 ", stop, "  kernel │  ", blue, kernel, stop)
 	fmt.Print("│ ", blue, "  ", stop, "  uptime │  ", red, uptime, stop)
-	fmt.Println("│", blue, "  ", stop, "shell │", yellow, shell, stop)
+	fmt.Println("│", blue, " ", stop, "shell  │", yellow, shell, stop)
 	fmt.Print("│ ", red, " 󰏖 ", stop, "  pkgs   │  ", green, packages, stop)
 	fmt.Println("│", red, "󰍛 ", stop, "mem    │", blue, usedmem, "|", totalmem, "MiB", stop)
 	fmt.Println("├───────────┤")
