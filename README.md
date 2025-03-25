@@ -8,11 +8,11 @@
   - [Building and running](#building-and-running)
   <!--toc:end-->
 
-This program is inspired by [nitch](https://github.com/ssleert/nitch) but written in go.
+This program is inspired by [nitch](https://github.com/ssleert/nitch) but written in Go.
 
 ## Key differences from nitch
 
-- Written in go
+- Written in Go
 - Different icons
 - No word art (yet)
 - Colors are randomized
