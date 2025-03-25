@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os/exec"
 )
 
 func main() {
@@ -23,8 +22,7 @@ func main() {
 	kernel := GetKernel()
 	uptime := GetUptime()
 	shell := GetShell()
-	packagesbytes, _ := exec.Command("sh", "-c", " pacman -Q|wc -l").Output()
-	packages := string(packagesbytes)
+	packages := GetPackages()
 	totalmem := GetTotalMemory()
 	usedmem := GetUsedMemory()
 
@@ -36,7 +34,7 @@ func main() {
 	fmt.Print("│ ", green, " 󰌢 ", stop, "  kernel │  ", blue, kernel, stop)
 	fmt.Print("│ ", blue, "  ", stop, "  uptime │  ", red, uptime, stop)
 	fmt.Println("│", blue, " ", stop, "shell  │", yellow, shell, stop)
-	fmt.Print("│ ", red, " 󰏖 ", stop, "  pkgs   │  ", green, packages, stop)
+	fmt.Println("│", red, "󰏖 ", stop, "pkgs   │", green, packages, stop)
 	fmt.Println("│", red, "󰍛 ", stop, "mem    │", blue, usedmem, "|", totalmem, "MiB", stop)
 	fmt.Println("├───────────┤")
 	fmt.Println("│ 󰏘  colors │", grey, dot, red, dot, yellow, dot, green, dot, teal, dot, blue, dot, pink, dot, black, dot, stop)

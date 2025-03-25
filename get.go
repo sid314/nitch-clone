@@ -68,6 +68,13 @@ func GetTotalMemory() int {
 	return getRawTotalMemory() / 1024
 }
 
+func GetPackages() int {
+	packagesbytes, _ := exec.Command("pacman", "-Q").Output()
+	packages := string(packagesbytes)
+	lines := strings.Count(packages, "\n")
+	return lines
+}
+
 func GetUsedMemory() int {
 	rawfreememory := getRawTotalMemory() - getRawFreeMemory()
 	return rawfreememory / 1024
