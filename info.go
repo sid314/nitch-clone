@@ -10,20 +10,20 @@ import (
 )
 
 type (
-	Hostname   string
-	Username   string
-	Distroname string
-	Kernel     string
-	Shell      string
-	Uptime     string
-	Memory     int
-	Packages   int
+	Hostname string
+	Username string
+	Distro   string
+	Kernel   string
+	Shell    string
+	Uptime   string
+	Memory   int
+	Packages int
 )
 
 type Info struct {
 	hostname    Hostname
 	username    Username
-	distro      Distroname
+	distro      Distro
 	kernel      Kernel
 	shell       Shell
 	uptime      Uptime
@@ -34,19 +34,19 @@ type Info struct {
 
 func GetInfo() Info {
 	info := Info{
-		GetHostName(),
-		GetUserName(),
-		GetDistro(),
-		GetKernel(),
-		GetShell(), GetUptime(),
-		GetTotalMemory(),
-		GetUsedMemory(),
-		GetPackages(),
+		getHostName(),
+		getUserName(),
+		getDistro(),
+		getKernel(),
+		getShell(), getUptime(),
+		getTotalMemory(),
+		getUsedMemory(),
+		getPackages(),
 	}
 	return info
 }
 
-func GetHostName() Hostname {
+func getHostName() Hostname {
 	hostname, error := os.Hostname()
 	if error != nil {
 		log.Fatal(error)
@@ -54,7 +54,7 @@ func GetHostName() Hostname {
 	return Hostname(hostname)
 }
 
-func GetUserName() Username {
+func getUserName() Username {
 	user, error := user.Current()
 	if error != nil {
 		log.Fatal(error)
@@ -63,7 +63,7 @@ func GetUserName() Username {
 	return Username(user.Username)
 }
 
-func GetDistro() Distroname {
+func getDistro() Distro {
 	osReleaseBytes, error := os.ReadFile("/etc/os-release")
 
 	if error != nil {
@@ -71,10 +71,10 @@ func GetDistro() Distroname {
 	}
 
 	osRelease := string(osReleaseBytes)
-	return Distroname(SnipSnip("PRETTY_NAME=\"", "\"", osRelease))
+	return Distro(SnipSnip("PRETTY_NAME=\"", "\"", osRelease))
 }
 
-func GetKernel() Kernel {
+func getKernel() Kernel {
 	kernelBytes, error := exec.Command("uname", "-r").Output()
 	if error != nil {
 		log.Fatal(error)
@@ -84,7 +84,7 @@ func GetKernel() Kernel {
 	return Kernel(kernel)
 }
 
-func GetUptime() Uptime {
+func getUptime() Uptime {
 	uptimeBytes, error := exec.Command("uptime", "-p").Output()
 	if error != nil {
 		log.Fatal(error)
@@ -101,7 +101,7 @@ func GetUptime() Uptime {
 	return Uptime(uptime)
 }
 
-func GetShell() Shell {
+func getShell() Shell {
 	shellPieces := strings.SplitAfter(os.Getenv("SHELL"), "/")
 	return Shell(shellPieces[len(shellPieces)-1])
 }
@@ -140,11 +140,11 @@ func getRawFreeMemory() Memory {
 	return Memory(totalRawMemory)
 }
 
-func GetTotalMemory() Memory {
+func getTotalMemory() Memory {
 	return Memory(getRawTotalMemory() / 1024)
 }
 
-func GetPackages() Packages {
+func getPackages() Packages {
 	packagesBytes, error := exec.Command("pacman", "-Q").Output()
 	if error != nil {
 		log.Fatal(error)
@@ -155,7 +155,7 @@ func GetPackages() Packages {
 	return Packages(lines)
 }
 
-func GetUsedMemory() Memory {
+func getUsedMemory() Memory {
 	rawFreeMemory := getRawTotalMemory() - getRawFreeMemory()
 	return Memory(rawFreeMemory / 1024)
 }
