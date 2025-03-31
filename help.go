@@ -16,6 +16,6 @@ func SnipSnip(prefix string, suffix string, s string) string {
 func catppuccinToColor(namedColor catppuccin.Color) *color.Color {
 	r, g, b, _ := namedColor.RGBA()
 	R, G, B := int(r), int(g), int(b)
-	c := color.RGB(R, G, B)
-	return c
+	color := color.RGB(R, G, B)
+	return color
 }
