@@ -15,7 +15,7 @@ This program is inspired by [nitch](https://github.com/ssleert/nitch) but writte
 - Written in Go
 - Different icons
 - No word art (yet)
-- Colors are randomized
+- ~~Colors are randomized~~ (WIP)
 
 ## Dependencies
 
