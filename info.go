@@ -20,6 +20,32 @@ type (
 	Packages   int
 )
 
+type Info struct {
+	hostname    Hostname
+	username    Username
+	distro      Distroname
+	kernel      Kernel
+	shell       Shell
+	uptime      Uptime
+	totalMemory Memory
+	usedMemory  Memory
+	packages    Packages
+}
+
+func GetInfo() Info {
+	info := Info{
+		GetHostName(),
+		GetUserName(),
+		GetDistro(),
+		GetKernel(),
+		GetShell(), GetUptime(),
+		GetTotalMemory(),
+		GetUsedMemory(),
+		GetPackages(),
+	}
+	return info
+}
+
 func GetHostName() Hostname {
 	hostname, error := os.Hostname()
 	if error != nil {
