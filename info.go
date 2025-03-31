@@ -9,25 +9,35 @@ import (
 	"strings"
 )
 
-func GetHostName() string {
+type (
+	Hostname   string
+	Username   string
+	Distroname string
+	Kernel     string
+	Shell      string
+	Uptime     string
+	Memory     int
+	Packages   int
+)
+
+func GetHostName() Hostname {
 	hostname, error := os.Hostname()
 	if error != nil {
 		log.Fatal(error)
 	}
-
-	return hostname
+	return Hostname(hostname)
 }
 
-func GetUserName() string {
+func GetUserName() Username {
 	user, error := user.Current()
 	if error != nil {
 		log.Fatal(error)
 	}
 
-	return user.Username
+	return Username(user.Username)
 }
 
-func GetDistro() string {
+func GetDistro() Distroname {
 	osReleaseBytes, error := os.ReadFile("/etc/os-release")
 
 	if error != nil {
@@ -35,19 +45,20 @@ func GetDistro() string {
 	}
 
 	osRelease := string(osReleaseBytes)
-	return SnipSnip("PRETTY_NAME=\"", "\"", osRelease)
+	return Distroname(SnipSnip("PRETTY_NAME=\"", "\"", osRelease))
 }
 
-func GetKernel() string {
+func GetKernel() Kernel {
 	kernelBytes, error := exec.Command("uname", "-r").Output()
 	if error != nil {
 		log.Fatal(error)
 	}
-
-	return string(kernelBytes)
+	kernel := string(kernelBytes)
+	kernel = strings.TrimSpace(kernel)
+	return Kernel(kernel)
 }
 
-func GetUptime() string {
+func GetUptime() Uptime {
 	uptimeBytes, error := exec.Command("uptime", "-p").Output()
 	if error != nil {
 		log.Fatal(error)
@@ -60,15 +71,16 @@ func GetUptime() string {
 	uptime = strings.ReplaceAll(uptime, "minute", "m")
 	uptime = strings.ReplaceAll(uptime, "hour", "h")
 	uptime = strings.ReplaceAll(uptime, "day", "d")
-	return uptime
+	uptime = strings.TrimSpace(uptime)
+	return Uptime(uptime)
 }
 
-func GetShell() string {
+func GetShell() Shell {
 	shellPieces := strings.SplitAfter(os.Getenv("SHELL"), "/")
-	return shellPieces[len(shellPieces)-1]
+	return Shell(shellPieces[len(shellPieces)-1])
 }
 
-func getRawTotalMemory() int {
+func getRawTotalMemory() Memory {
 	memInfoBytes, error := os.ReadFile("/proc/meminfo")
 	if error != nil {
 		log.Fatal(error)
@@ -82,10 +94,10 @@ func getRawTotalMemory() int {
 		log.Fatal(error)
 	}
 
-	return totalRawMemory
+	return Memory(totalRawMemory)
 }
 
-func getRawFreeMemory() int {
+func getRawFreeMemory() Memory {
 	memInfoBytes, error := os.ReadFile("/proc/meminfo")
 	if error != nil {
 		log.Fatal(error)
@@ -99,14 +111,14 @@ func getRawFreeMemory() int {
 		log.Fatal(error)
 	}
 
-	return totalRawMemory
+	return Memory(totalRawMemory)
 }
 
-func GetTotalMemory() int {
-	return getRawTotalMemory() / 1024
+func GetTotalMemory() Memory {
+	return Memory(getRawTotalMemory() / 1024)
 }
 
-func GetPackages() int {
+func GetPackages() Packages {
 	packagesBytes, error := exec.Command("pacman", "-Q").Output()
 	if error != nil {
 		log.Fatal(error)
@@ -114,10 +126,10 @@ func GetPackages() int {
 
 	packages := string(packagesBytes)
 	lines := strings.Count(packages, "\n")
-	return lines
+	return Packages(lines)
 }
 
-func GetUsedMemory() int {
+func GetUsedMemory() Memory {
 	rawFreeMemory := getRawTotalMemory() - getRawFreeMemory()
-	return rawFreeMemory / 1024
+	return Memory(rawFreeMemory / 1024)
 }
