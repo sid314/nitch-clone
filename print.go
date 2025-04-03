@@ -2,21 +2,14 @@ package main
 
 import "fmt"
 
-func SimplePrint() {
-	info := GetInfo()
-	// dot := ""
-	fmt.Printf("╭───────────╮\n")
-	fmt.Printf("│   user   │ %s \n", info.username)
-	fmt.Printf("│   host   │ %s \n", info.hostname)
-	fmt.Printf("│   distro │ %s \n", info.distro)
-	fmt.Printf("│ 󰌢  kernel │ %s \n", info.kernel)
-	fmt.Printf("│   uptime │ %s \n", info.uptime)
-	fmt.Printf("│   shell  │ %s \n", info.shell)
-	fmt.Printf("│ 󰏖  pkgs   │ %d \n", info.packages)
-	fmt.Printf("│ 󰍛  memory │ %d | %d \n", info.usedMemory, info.totalMemory)
-	fmt.Printf("├───────────┤ \n")
-	fmt.Printf("│ 󰏘  colors │         \n")
-	fmt.Printf("╰───────────╯\n")
+func Print() {
+	config := GetConfig()
+	switch config.style {
+	case "nitch":
+		printNitch(config.theme)
+	case "classic":
+		// printClassic(config.theme)
+	}
 	// fmt.Println("│", teal, " ", stop, "hname  │", colornames[1], hostname, stop)
 	// fmt.Println("│", green, " ", stop, "distro │", colornames[2], distroname, stop)
 	// fmt.Println("│", green, "󰌢 ", stop, "kernel │", colornames[3], kernel, stop)
@@ -27,4 +20,23 @@ func SimplePrint() {
 	// fmt.Println("├───────────┤")
 	// fmt.Println("│ 󰏘  colors │", grey, dot, red, dot, yellow, dot, green, dot, teal, dot, blue, dot, pink, dot, black, dot, stop)
 	// fmt.Println("╰───────────╯")
+}
+
+func printNitch(theme string) {
+	info := GetInfo()
+	// dot := ""
+	if theme == "grayscale" {
+		fmt.Printf("╭───────────╮\n")
+		fmt.Printf("│   user   │ %s \n", info.username)
+		fmt.Printf("│   host   │ %s \n", info.hostname)
+		fmt.Printf("│   distro │ %s \n", info.distro)
+		fmt.Printf("│ 󰌢  kernel │ %s \n", info.kernel)
+		fmt.Printf("│   uptime │ %s \n", info.uptime)
+		fmt.Printf("│   shell  │ %s \n", info.shell)
+		fmt.Printf("│ 󰏖  pkgs   │ %d \n", info.packages)
+		fmt.Printf("│ 󰍛  memory │ %d | %d \n", info.usedMemory, info.totalMemory)
+		fmt.Printf("├───────────┤ \n")
+		fmt.Printf("│ 󰏘  colors │         \n")
+		fmt.Printf("╰───────────╯\n")
+	}
 }

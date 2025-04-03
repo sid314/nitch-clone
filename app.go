@@ -57,5 +57,5 @@ func main() {
 
 	//
 	//
-	SimplePrint()
+	Print()
 }
