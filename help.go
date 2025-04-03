@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	catppuccin "github.com/catppuccin/go"
@@ -18,4 +19,9 @@ func catppuccinToColor(namedColor catppuccin.Color) *color.Color {
 	R, G, B := int(r), int(g), int(b)
 	color := color.RGB(R, G, B)
 	return color
+}
+
+func PrintConfig(config Config) {
+	fmt.Println(config.style)
+	fmt.Println(config.theme)
 }
