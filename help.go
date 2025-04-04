@@ -21,22 +21,20 @@ func catppuccinToColor(namedColor catppuccin.Color) *color.Color {
 	return color
 }
 
-func GeneratePrintFunctions(colors Palette) PrintFunctions {
+func GeneratePrintFunctions(theme ThemeName) PrintFunctions {
+	var colors Palette
+	switch theme {
+	case "catppuccin-mocha", "catppuccin-latte", "catppuccin-frappe", "catppuccin-macchiato":
+		colors = generateCatpuccinPalette(theme)
+	default:
+		colors = generateGrayscalePalette()
+
+	}
 	var functions [16]func(a ...any) string
 	for i := range colors {
 		functions[i] = colors[i].SprintFunc()
 	}
 	return functions
-}
-
-func GeneratePalette(theme ThemeName) Palette {
-	switch theme {
-	case "catppuccin-mocha", "catppuccin-latte", "catppuccin-frappe", "catppuccin-macchiato":
-		return generateCatpuccinPalette(theme)
-	default:
-		return generateGrayscalePalette()
-
-	}
 }
 
 func PrintConfig(config Config) {

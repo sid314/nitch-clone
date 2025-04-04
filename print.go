@@ -34,7 +34,7 @@ func Print() {
 func printNitch(theme ThemeName) {
 	info := GetInfo()
 	dot := ""
-	printFunctions := GeneratePrintFunctions(GeneratePalette(theme))
+	printFunctions := GeneratePrintFunctions(theme)
 	fmt.Printf("╭───────────╮\n")
 	fmt.Printf("│ %s   │ %s \n", printFunctions[0]("  user"), printFunctions[1](info.username))
 	fmt.Printf("│ %s   │ %s \n", printFunctions[2]("  host"), printFunctions[3](info.hostname))
