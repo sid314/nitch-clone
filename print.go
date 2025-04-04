@@ -29,16 +29,6 @@ func Print() {
 	case "classic":
 		// printClassic(config.theme)
 	}
-	// fmt.Println("│", teal, " ", stop, "hname  │", colornames[1], hostname, stop)
-	// fmt.Println("│", green, " ", stop, "distro │", colornames[2], distroname, stop)
-	// fmt.Println("│", green, "󰌢 ", stop, "kernel │", colornames[3], kernel, stop)
-	// fmt.Println("│", blue, " ", stop, "uptime │", colornames[4], uptime, stop)
-	// fmt.Println("│", blue, " ", stop, "shell  │", colornames[5], shell, stop)
-	// fmt.Println("│", red, "󰏖 ", stop, "pkgs   │", colornames[6], packages, stop)
-	// fmt.Println("│", red, "󰍛 ", stop, "mem    │", colornames[7], usedmem, "|", totalmem, "MiB", stop)
-	// fmt.Println("├───────────┤")
-	// fmt.Println("│ 󰏘  colors │", grey, dot, red, dot, yellow, dot, green, dot, teal, dot, blue, dot, pink, dot, black, dot, stop)
-	// fmt.Println("╰───────────╯")
 }
 
 func printNitch(theme ThemeName) {
