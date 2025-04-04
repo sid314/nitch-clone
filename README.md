@@ -8,13 +8,15 @@
   - [Building and running](#building-and-running)
   <!--toc:end-->
 
-This program is inspired by [nitch](https://github.com/ssleert/nitch) but written in Go.
+This program is inspired by
+[nitch](https://github.com/ssleert/nitch) but written in Go.
 
-## Key differences from nitch
+## Key Differences from nitch
 
 - Written in Go
 - Different icons
 - No word art (yet)
+- Themes
 - ~~Colors are randomized~~ (WIP)
 
 ## Dependencies
@@ -22,7 +24,21 @@ This program is inspired by [nitch](https://github.com/ssleert/nitch) but writte
 This program requires `uname` and `uptime`
 to be available.
 
-## Building and running
+## Config and Themes
+
+Themes ~~and styles~~ (WIP) can be set through `config.toml`
+placed in `$XDG_HOME/nitch-clone`
+(It will be`~/.config/nitch-clone/config.toml` for most users).
+
+Currently 5 themes are available
+
+- catppuccin-mocha
+- catppuccin-frappe
+- catppuccin-latte
+- catppuccin-machiato
+- grayscale
+
+## Building and Running
 
 > [!NOTE]
 > For building and running `go` must be installed.
