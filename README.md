@@ -17,7 +17,6 @@ This program is inspired by
 - Different icons
 - No word art (yet)
 - Themes
-- ~~Colors are randomized~~ (WIP)
 
 ## Dependencies
 
@@ -30,13 +29,17 @@ Themes ~~and styles~~ (WIP) can be set through `config.toml`
 placed in `$XDG_HOME/nitch-clone`
 (It will be`~/.config/nitch-clone/config.toml` for most users).
 
-Currently 5 themes are available
+Currently 9 themes are available
 
 - catppuccin-mocha
 - catppuccin-frappe
 - catppuccin-latte
-- catppuccin-machiato
+- catppuccin-macchiato
 - grayscale
+- 6-colors
+- random-6-colors
+- 6-colors-high-intensity
+- random-6-colors-high-intensity
 
 ## Building and Running
 
