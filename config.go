@@ -6,18 +6,18 @@ import (
 	"os"
 
 	"github.com/adrg/xdg"
-	"github.com/goccy/go-yaml"
+	"github.com/pelletier/go-toml/v2"
 )
 
 type Config struct {
-	theme string
-	style string
+	Theme string
+	Style string
 }
 
-var defaultConfig = Config{"grayscale", "nitch"}
+var defaultConfig = Config{"grayscale", "classic"}
 
 func GetConfig() Config {
-	configPath := xdg.ConfigHome + "/nitch-clone/config.yml"
+	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
 	if errors.Is(err, os.ErrNotExist) {
 		return defaultConfig
@@ -30,13 +30,13 @@ func GetConfig() Config {
 
 func parseConfig(in []byte) Config {
 	var v struct {
-		theme string `yaml:"theme"`
-		style string `yaml:"style"`
+		Theme string
+		Style string
 	}
-	if err := yaml.Unmarshal(in, &v); err != nil {
+	if err := toml.Unmarshal(in, &v); err != nil {
 		log.Fatal(err)
 	}
-	config := Config{v.theme, v.style}
+	config := Config{v.Theme, v.Style}
 	if validateConfig(config) {
 		return config
 	} else {
@@ -47,13 +47,13 @@ func parseConfig(in []byte) Config {
 func validateConfig(config Config) bool {
 	var styleIsValid bool
 	var themeIsValid bool
-	switch config.style {
+	switch config.Style {
 	case "classic", "nitch":
 		styleIsValid = true
 	default:
 		styleIsValid = false
 	}
-	switch config.theme {
+	switch config.Theme {
 	case "catppuccin-mocha", "catppuccin-frappe", "catppuccin-latte", "catppuccin-macchiato", "grayscale":
 		themeIsValid = true
 	default:
