@@ -31,7 +31,7 @@ func printNitch(theme ThemeName) {
 	fmt.Printf("│ %s │ %s | %s \n", printFunctions[14]("󰍛  memory"), printFunctions[15](info.usedMemory), printFunctions[15](info.totalMemory))
 	fmt.Printf("├───────────┤ \n")
 	fmt.Printf("│ %s │", printFunctions[0]("󰏘  colors"))
-	for i := range 8 {
+	for i := 0; i < 16; i += 2 {
 		fmt.Printf(" %s", printFunctions[i](dot))
 	}
 	fmt.Println("")
