@@ -2,24 +2,9 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/fatih/color"
 )
 
 // By default palettes contain 16 colors. If a theme has any less, the remaining are set to white
-type (
-	Palette        [16]*color.Color
-	PrintFunctions [16]func(a ...any) string
-)
-
-type (
-	StyleName string
-	ThemeName string
-	Theme     struct {
-		name   ThemeName
-		colors Palette
-	}
-)
 
 func Print() {
 	config := GetConfig()
