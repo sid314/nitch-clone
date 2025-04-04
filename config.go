@@ -14,7 +14,7 @@ type Config struct {
 	Style StyleName
 }
 
-var defaultConfig = Config{"grayscale", "classic"}
+var defaultConfig = Config{"6-colors", "nitch"}
 
 func GetConfig() Config {
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
@@ -54,7 +54,15 @@ func validateConfig(config Config) bool {
 		styleIsValid = false
 	}
 	switch config.Theme {
-	case "catppuccin-mocha", "catppuccin-frappe", "catppuccin-latte", "catppuccin-macchiato", "grayscale":
+	case
+		"catppuccin-mocha",
+		"catppuccin-frappe",
+		"catppuccin-latte",
+		"catppuccin-macchiato",
+		"grayscale", "6-colors",
+		"6-colors-high-intensity",
+		"random-6-colors",
+		"random-6-colors-high-intensity":
 		themeIsValid = true
 	default:
 		themeIsValid = false
