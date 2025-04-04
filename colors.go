@@ -21,7 +21,7 @@ type (
 	}
 )
 
-func catppuccinToColor(namedColor catppuccin.Color) *color.Color {
+func Color(namedColor catppuccin.Color) *color.Color {
 	r, g, b, _ := namedColor.RGBA()
 	R, G, B := int(r), int(g), int(b)
 	color := color.RGB(R, G, B)
@@ -32,18 +32,18 @@ func GeneratePrintFunctions(theme ThemeName) PrintFunctions {
 	var colors Palette
 	switch theme {
 	case "catppuccin-mocha", "catppuccin-latte", "catppuccin-frappe", "catppuccin-macchiato":
-		colors = generateCatpuccinPalette(theme)
+		colors = catpuccinPalette(theme)
 	case "6-colors":
-		colors = generate6ColorPalette()
+		colors = sixColorPalette()
 	case "6-colors-high-intensity":
-		colors = generate6HighIntensityColorPalette()
+		colors = sixHighIntensityColorPalette()
 	case "random-6-colors":
-		colors = generateRandom6colorPalette()
+		colors = randomSixColorPalette()
 	case "random-6-colors-high-intensity":
-		colors = generateRandomHighIntensity6colorPalette()
+		colors = randomHighIntensitySixcolorPalette()
 
 	default:
-		colors = generateGrayscalePalette()
+		colors = grayscalePalette()
 
 	}
 	var functions [16]func(a ...any) string
@@ -53,7 +53,7 @@ func GeneratePrintFunctions(theme ThemeName) PrintFunctions {
 	return functions
 }
 
-func generateGrayscalePalette() Palette {
+func grayscalePalette() Palette {
 	var palette Palette
 	for i := range palette {
 		palette[i] = color.RGB(255, 255, 255)
@@ -61,7 +61,7 @@ func generateGrayscalePalette() Palette {
 	return palette
 }
 
-func generate6ColorPalette() Palette {
+func sixColorPalette() Palette {
 	var palette Palette
 	palette[0] = color.New(color.FgBlue)
 	palette[1] = color.New(color.FgBlue)
@@ -82,7 +82,7 @@ func generate6ColorPalette() Palette {
 	return palette
 }
 
-func generate6HighIntensityColorPalette() Palette {
+func sixHighIntensityColorPalette() Palette {
 	var palette Palette
 	palette[0] = color.New(color.FgHiBlue)
 	palette[1] = color.New(color.FgHiBlue)
@@ -103,7 +103,7 @@ func generate6HighIntensityColorPalette() Palette {
 	return palette
 }
 
-func generateRandom6colorPalette() Palette {
+func randomSixColorPalette() Palette {
 	colors := [16]*color.Color{
 		color.New(color.FgBlue),
 		color.New(color.FgBlue),
@@ -131,7 +131,7 @@ func generateRandom6colorPalette() Palette {
 	return palette
 }
 
-func generateRandomHighIntensity6colorPalette() Palette {
+func randomHighIntensitySixcolorPalette() Palette {
 	colors := [16]*color.Color{
 		color.New(color.FgHiBlue),
 		color.New(color.FgHiBlue),
@@ -159,7 +159,7 @@ func generateRandomHighIntensity6colorPalette() Palette {
 	return palette
 }
 
-func generateCatpuccinPalette(theme ThemeName) Palette {
+func catpuccinPalette(theme ThemeName) Palette {
 	var flavour catppuccin.Flavor
 	var palette Palette
 	switch theme {
@@ -172,21 +172,21 @@ func generateCatpuccinPalette(theme ThemeName) Palette {
 	case "catppuccin-latte":
 		flavour = catppuccin.Latte
 	}
-	palette[0] = catppuccinToColor(flavour.Sky())
-	palette[1] = catppuccinToColor(flavour.Sapphire())
-	palette[2] = catppuccinToColor(flavour.Lavender())
-	palette[3] = catppuccinToColor(flavour.Mauve())
-	palette[4] = catppuccinToColor(flavour.Blue())
-	palette[5] = catppuccinToColor(flavour.Sky())
-	palette[6] = catppuccinToColor(flavour.Peach())
-	palette[7] = catppuccinToColor(flavour.Yellow())
-	palette[8] = catppuccinToColor(flavour.Red())
-	palette[9] = catppuccinToColor(flavour.Maroon())
-	palette[10] = catppuccinToColor(flavour.Green())
-	palette[11] = catppuccinToColor(flavour.Teal())
-	palette[12] = catppuccinToColor(flavour.Rosewater())
-	palette[13] = catppuccinToColor(flavour.Flamingo())
-	palette[14] = catppuccinToColor(flavour.Pink())
-	palette[15] = catppuccinToColor(flavour.Lavender())
+	palette[0] = Color(flavour.Sky())
+	palette[1] = Color(flavour.Sapphire())
+	palette[2] = Color(flavour.Lavender())
+	palette[3] = Color(flavour.Mauve())
+	palette[4] = Color(flavour.Blue())
+	palette[5] = Color(flavour.Sky())
+	palette[6] = Color(flavour.Peach())
+	palette[7] = Color(flavour.Yellow())
+	palette[8] = Color(flavour.Red())
+	palette[9] = Color(flavour.Maroon())
+	palette[10] = Color(flavour.Green())
+	palette[11] = Color(flavour.Teal())
+	palette[12] = Color(flavour.Rosewater())
+	palette[13] = Color(flavour.Flamingo())
+	palette[14] = Color(flavour.Pink())
+	palette[15] = Color(flavour.Lavender())
 	return palette
 }
