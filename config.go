@@ -10,8 +10,8 @@ import (
 )
 
 type Config struct {
-	Theme string
-	Style string
+	Theme ThemeName
+	Style StyleName
 }
 
 var defaultConfig = Config{"grayscale", "classic"}
@@ -36,7 +36,7 @@ func parseConfig(in []byte) Config {
 	if err := toml.Unmarshal(in, &v); err != nil {
 		log.Fatal(err)
 	}
-	config := Config{v.Theme, v.Style}
+	config := Config{ThemeName(v.Theme), StyleName(v.Style)}
 	if validateConfig(config) {
 		return config
 	} else {
