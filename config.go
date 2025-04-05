@@ -4,56 +4,61 @@ import (
 	"errors"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/adrg/xdg"
 	"github.com/pelletier/go-toml/v2"
 )
 
 type Config struct {
-	Theme ThemeName
-	Style StyleName
+	Theme  ThemeName
+	Style  StyleName
+	Border BorderColorName
+	Dot    Dot
+}
+type RawConfig struct {
+	Theme  string
+	Style  string
+	Border string
+	Dot    string
 }
 
-var defaultConfig = Config{"6-colors", "nitch"}
-
 func GetConfig() Config {
+	config := Config{"6-colors", "nitch", "white", " "}
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
 	if errors.Is(err, os.ErrNotExist) {
-		return defaultConfig
+		return config
 	} else if err != nil {
-		return defaultConfig
+		return config
 	} else {
-		return parseConfig(configFile)
+		rawconfig := parseConfig(configFile)
+		if valid, theme := ValidTheme(rawconfig.Theme); valid {
+			config.Theme = theme
+		}
+		if valid, style := ValidStyle(rawconfig.Style); valid {
+			config.Style = style
+		}
+		if valid, border := ValidBorder(rawconfig.Border); valid {
+			config.Border = border
+		}
+		if valid, dot := ValidDot(rawconfig.Dot); valid {
+			config.Dot = dot
+		}
+		return config
 	}
 }
 
-func parseConfig(in []byte) Config {
-	var v struct {
-		Theme string
-		Style string
-	}
+func parseConfig(in []byte) RawConfig {
+	var v RawConfig
 	if err := toml.Unmarshal(in, &v); err != nil {
 		log.Fatal(err)
 	}
-	config := Config{ThemeName(v.Theme), StyleName(v.Style)}
-	if validateConfig(config) {
-		return config
-	} else {
-		return defaultConfig
-	}
+	return RawConfig{v.Theme, v.Style, v.Border, v.Dot}
 }
 
-func validateConfig(config Config) bool {
-	var styleIsValid bool
-	var themeIsValid bool
-	switch config.Style {
-	case "classic", "nitch":
-		styleIsValid = true
-	default:
-		styleIsValid = false
-	}
-	switch config.Theme {
+func ValidTheme(theme string) (bool, ThemeName) {
+	switch theme {
 	case
 		"catppuccin-mocha",
 		"catppuccin-frappe",
@@ -63,9 +68,37 @@ func validateConfig(config Config) bool {
 		"6-colors-high-intensity",
 		"random-6-colors",
 		"random-6-colors-high-intensity":
-		themeIsValid = true
+		return true, ThemeName(theme)
 	default:
-		themeIsValid = false
+		return false, ""
+
 	}
-	return styleIsValid && themeIsValid
+}
+
+func ValidStyle(style string) (bool, StyleName) {
+	switch style {
+	case "nitch", "classic":
+		return true, StyleName(style)
+	default:
+		return false, ""
+
+	}
+}
+
+func ValidBorder(border string) (bool, BorderColorName) {
+	switch border {
+	case "none", "theme", "white":
+		return true, BorderColorName(border)
+	default:
+		return false, ""
+
+	}
+}
+
+func ValidDot(dot string) (bool, Dot) {
+	if strings.TrimSpace(dot) != "" {
+		return true, Dot(dot)
+	} else {
+		return false, ""
+	}
 }

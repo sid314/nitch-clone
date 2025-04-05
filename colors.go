@@ -8,16 +8,19 @@ import (
 )
 
 type (
-	Palette        [16]*color.Color
-	PrintFunctions [16]func(a ...any) string
+	Palette [16]*color.Color
 )
 
 type (
-	StyleName string
-	ThemeName string
-	Theme     struct {
+	StyleName       string
+	ThemeName       string
+	BorderColorName string
+	Dot             string
+	Theme           struct {
 		name   ThemeName
 		colors Palette
+		border *color.Color
+		dot    Dot
 	}
 )
 
@@ -28,7 +31,22 @@ func Color(namedColor catppuccin.Color) *color.Color {
 	return color
 }
 
-func GeneratePrintFunctions(theme ThemeName) PrintFunctions {
+func IsCatppuccin(theme ThemeName) (bool, catppuccin.Flavor) {
+	switch theme {
+	case "catppuccin-mocha":
+		return true, catppuccin.Mocha
+	case "catppuccin-frappe":
+		return true, catppuccin.Frappe
+	case "catppuccin-latte":
+		return true, catppuccin.Latte
+	case "catppuccin-macchiato":
+		return true, catppuccin.Macchiato
+	default:
+		return false, nil
+	}
+}
+
+func GeneratePalette(theme ThemeName) Palette {
 	var colors Palette
 	switch theme {
 	case "catppuccin-mocha", "catppuccin-latte", "catppuccin-frappe", "catppuccin-macchiato":
@@ -46,11 +64,33 @@ func GeneratePrintFunctions(theme ThemeName) PrintFunctions {
 		colors = grayscalePalette()
 
 	}
-	var functions [16]func(a ...any) string
-	for i := range colors {
-		functions[i] = colors[i].SprintFunc()
+	return colors
+}
+
+func GenerateTheme(config Config) Theme {
+	var theme Theme
+	theme.name = config.Theme
+	theme.colors = GeneratePalette(config.Theme)
+	switch config.Border {
+	case "white":
+		theme.border = color.RGB(255, 255, 255)
+	case "none":
+		theme.border = color.RGB(0, 0, 0)
+	case "theme":
+		if isCatpuccin, flavour := IsCatppuccin(theme.name); isCatpuccin {
+			theme.border = Color(flavour.Base())
+		} else {
+			switch config.Theme {
+			case "grayscale":
+				theme.border = color.RGB(255, 255, 255)
+			default:
+				theme.border = color.New(color.FgWhite)
+			}
+		}
 	}
-	return functions
+
+	theme.dot = config.Dot
+	return theme
 }
 
 func grayscalePalette() Palette {

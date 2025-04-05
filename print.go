@@ -1,39 +1,59 @@
 package main
 
-import (
-	"fmt"
-)
-
 // By default palettes contain 16 colors. If a theme has any less, the remaining are set to white
 
 func Print() {
 	config := GetConfig()
+	theme := GenerateTheme(config)
+	info := GetInfo()
 	switch config.Style {
 	case "nitch":
-		printNitch(config.Theme)
+		printNitch(theme, info)
 	case "classic":
-		// printClassic(config.theme)
 	}
 }
 
-func printNitch(theme ThemeName) {
-	info := GetInfo()
-	dot := ""
-	printFunctions := GeneratePrintFunctions(theme)
-	fmt.Printf("╭───────────╮\n")
-	fmt.Printf("│ %s   │ %s \n", printFunctions[0]("  user"), printFunctions[1](info.username))
-	fmt.Printf("│ %s   │ %s \n", printFunctions[2]("  host"), printFunctions[3](info.hostname))
-	fmt.Printf("│ %s │ %s \n", printFunctions[4]("  distro"), printFunctions[5](info.distro))
-	fmt.Printf("│ %s │ %s \n", printFunctions[6]("󰌢  kernel"), printFunctions[7](info.kernel))
-	fmt.Printf("│ %s │ %s \n", printFunctions[8]("  uptime"), printFunctions[9](info.uptime))
-	fmt.Printf("│ %s  │ %s \n", printFunctions[10]("  shell"), printFunctions[11](info.shell))
-	fmt.Printf("│ %s   │ %s \n", printFunctions[12]("󰏖  pkgs"), printFunctions[13](info.packages))
-	fmt.Printf("│ %s │ %s | %s \n", printFunctions[14]("󰍛  memory"), printFunctions[15](info.usedMemory), printFunctions[15](info.totalMemory))
-	fmt.Printf("├───────────┤ \n")
-	fmt.Printf("│ %s │", printFunctions[0]("󰏘  colors"))
+func printNitch(theme Theme, info Info) {
+	dot := theme.dot
+	theme.border.Printf("╭───────────╮\n")
+	theme.border.Printf("│ ")
+	theme.colors[0].Printf("  user   ")
+	theme.border.Printf("│ ")
+	theme.colors[1].Printf("%s\n", info.username)
+	theme.border.Printf("│ ")
+	theme.colors[2].Printf("  host   ")
+	theme.border.Printf("│ ")
+	theme.colors[3].Printf("%s\n", info.hostname)
+	theme.border.Printf("│ ")
+	theme.colors[4].Printf("  distro ")
+	theme.border.Printf("│ ")
+	theme.colors[5].Printf("%s\n", info.distro)
+	theme.border.Printf("│ ")
+	theme.colors[6].Printf("󰌢  kernel ")
+	theme.border.Printf("│ ")
+	theme.colors[7].Printf("%s\n", info.kernel)
+	theme.border.Printf("│ ")
+	theme.colors[8].Printf("  uptime ")
+	theme.border.Printf("│ ")
+	theme.colors[9].Printf("%s\n", info.uptime)
+	theme.border.Printf("│ ")
+	theme.colors[10].Printf("  shell  ")
+	theme.border.Printf("│ ")
+	theme.colors[11].Printf("%s\n", info.shell)
+	theme.border.Printf("│ ")
+	theme.colors[12].Printf("󰏖  pkgs   ")
+	theme.border.Printf("│ ")
+	theme.colors[13].Printf("%d\n", info.packages)
+	theme.border.Printf("│ ")
+	theme.colors[14].Printf("󰍛  memory ")
+	theme.border.Printf("│ ")
+	theme.colors[15].Printf("%d | %d MiB \n", info.usedMemory, info.totalMemory)
+	theme.border.Printf("├───────────┤ \n")
+	theme.border.Printf("│ ")
+	theme.colors[0].Printf("󰏘  colors ")
+	theme.border.Printf("│ ")
 	for i := 0; i < 16; i += 2 {
-		fmt.Printf(" %s", printFunctions[i](dot))
+		theme.colors[i].Printf("%s ", dot)
 	}
-	fmt.Println("")
-	fmt.Printf("╰───────────╯\n")
+	theme.border.Printf("\n╰───────────╯\n")
 }

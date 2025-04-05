@@ -1,2 +1,17 @@
-theme = "catppuccin-macchiato"
+theme = "6-colors"
+# themes can be
+# "catppuccin-mocha"
+# "catppuccin-frappe"
+# "catppuccin-latte"
+# "catppuccin-macchiato"
+# "grayscale"
+# "6-colors"
+# "6-colors-high-intensity"
+# "random-6-colors"
+# "random-6-colors-high-intensity"
 style = "nitch"
+# styles can be only "nitch" for now 
+border = "white"
+# border can be "white", "none","theme"
+dot = ""
+# dot can be any non whitespace string

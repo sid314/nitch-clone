@@ -41,6 +41,9 @@ Currently 9 themes are available
 - 6-colors-high-intensity
 - random-6-colors-high-intensity
 
+The dots and border color can be set
+independently of the theme.
+
 ## Building and Running
 
 > [!NOTE]
