@@ -12,6 +12,8 @@ func SnipSnip(prefix string, suffix string, s string) string {
 }
 
 func PrintConfig(config Config) {
-	fmt.Println(config.Style)
 	fmt.Println(config.Theme)
+	fmt.Println(config.Border)
+	fmt.Println(config.Dot)
+	fmt.Println(config.Printables)
 }

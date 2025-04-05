@@ -1,59 +1,65 @@
 package main
 
 // By default palettes contain 16 colors. If a theme has any less, the remaining are set to white
+type PrintableInfo struct {
+	Field string
+	Value string
+}
+
+func largestFieldLength(disableColors bool, printables []PrintableInfo) int {
+	largestFieldLength := 0
+	if !disableColors {
+		largestFieldLength = 10
+	}
+	for _, printable := range printables {
+		if l := len(printable.Field); l > largestFieldLength {
+			largestFieldLength = l
+		}
+	}
+	return largestFieldLength - 2
+}
 
 func Print() {
 	config := GetConfig()
 	theme := GenerateTheme(config)
-	info := GetInfo()
-	switch config.Style {
-	case "nitch":
-		printNitch(theme, info)
-	case "classic":
-	}
-}
-
-func printNitch(theme Theme, info Info) {
+	// info := GetInfo()
+	printables := config.Printables
+	disableColors := config.DisableColors
+	length := largestFieldLength(config.DisableColors, printables)
 	dot := theme.dot
-	theme.border.Printf("╭───────────╮\n")
-	theme.border.Printf("│ ")
-	theme.colors[0].Printf("  user   ")
-	theme.border.Printf("│ ")
-	theme.colors[1].Printf("%s\n", info.username)
-	theme.border.Printf("│ ")
-	theme.colors[2].Printf("  host   ")
-	theme.border.Printf("│ ")
-	theme.colors[3].Printf("%s\n", info.hostname)
-	theme.border.Printf("│ ")
-	theme.colors[4].Printf("  distro ")
-	theme.border.Printf("│ ")
-	theme.colors[5].Printf("%s\n", info.distro)
-	theme.border.Printf("│ ")
-	theme.colors[6].Printf("󰌢  kernel ")
-	theme.border.Printf("│ ")
-	theme.colors[7].Printf("%s\n", info.kernel)
-	theme.border.Printf("│ ")
-	theme.colors[8].Printf("  uptime ")
-	theme.border.Printf("│ ")
-	theme.colors[9].Printf("%s\n", info.uptime)
-	theme.border.Printf("│ ")
-	theme.colors[10].Printf("  shell  ")
-	theme.border.Printf("│ ")
-	theme.colors[11].Printf("%s\n", info.shell)
-	theme.border.Printf("│ ")
-	theme.colors[12].Printf("󰏖  pkgs   ")
-	theme.border.Printf("│ ")
-	theme.colors[13].Printf("%d\n", info.packages)
-	theme.border.Printf("│ ")
-	theme.colors[14].Printf("󰍛  memory ")
-	theme.border.Printf("│ ")
-	theme.colors[15].Printf("%d | %d MiB \n", info.usedMemory, info.totalMemory)
-	theme.border.Printf("├───────────┤ \n")
-	theme.border.Printf("│ ")
-	theme.colors[0].Printf("󰏘  colors ")
-	theme.border.Printf("│ ")
-	for i := 0; i < 16; i += 2 {
-		theme.colors[i].Printf("%s ", dot)
+	theme.border.Printf("╭")
+	for range length {
+		theme.border.Printf("─")
 	}
-	theme.border.Printf("\n╰───────────╯\n")
+	theme.border.Printf("╮\n")
+	for i, j := 0, 0; i < len(printables); i++ {
+
+		theme.border.Printf("│ ")
+		theme.colors[j].Print(printables[i].Field)
+		theme.border.Printf("│ ")
+		theme.colors[j+1].Printf("%s\n", printables[i].Value)
+		j += 2
+	}
+	if !disableColors {
+		theme.border.Printf("├")
+		for range length {
+			theme.border.Printf("─")
+		}
+		theme.border.Printf("┤ \n")
+		theme.border.Printf("│ ")
+		theme.colors[0].Printf("󰏘 colors")
+		for range length - 9 {
+			theme.border.Print(" ")
+		}
+		theme.border.Printf("│ ")
+		for i := 0; i < 16; i += 2 {
+			theme.colors[i].Printf("%s ", dot)
+		}
+		theme.border.Print("\n")
+	}
+	theme.border.Printf("╰")
+	for range length {
+		theme.border.Printf("─")
+	}
+	theme.border.Printf("╯\n")
 }

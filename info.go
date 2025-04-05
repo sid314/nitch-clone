@@ -20,33 +20,7 @@ type (
 	Packages int
 )
 
-type Info struct {
-	hostname    Hostname
-	username    Username
-	distro      Distro
-	kernel      Kernel
-	shell       Shell
-	uptime      Uptime
-	totalMemory Memory
-	usedMemory  Memory
-	packages    Packages
-}
-
-func GetInfo() Info {
-	info := Info{
-		getHostName(),
-		getUserName(),
-		getDistro(),
-		getKernel(),
-		getShell(), getUptime(),
-		getTotalMemory(),
-		getUsedMemory(),
-		getPackages(),
-	}
-	return info
-}
-
-func getHostName() Hostname {
+func GetHostName() Hostname {
 	hostname, error := os.Hostname()
 	if error != nil {
 		log.Fatal(error)
@@ -54,7 +28,7 @@ func getHostName() Hostname {
 	return Hostname(hostname)
 }
 
-func getUserName() Username {
+func GetUserName() Username {
 	user, error := user.Current()
 	if error != nil {
 		log.Fatal(error)
@@ -63,7 +37,7 @@ func getUserName() Username {
 	return Username(user.Username)
 }
 
-func getDistro() Distro {
+func GetDistro() Distro {
 	osReleaseBytes, error := os.ReadFile("/etc/os-release")
 
 	if error != nil {
@@ -74,7 +48,7 @@ func getDistro() Distro {
 	return Distro(SnipSnip("PRETTY_NAME=\"", "\"", osRelease))
 }
 
-func getKernel() Kernel {
+func GetKernel() Kernel {
 	kernelBytes, error := exec.Command("uname", "-r").Output()
 	if error != nil {
 		log.Fatal(error)
@@ -84,7 +58,7 @@ func getKernel() Kernel {
 	return Kernel(kernel)
 }
 
-func getUptime() Uptime {
+func GetUptime() Uptime {
 	uptimeBytes, error := exec.Command("uptime", "-p").Output()
 	if error != nil {
 		log.Fatal(error)
@@ -101,12 +75,12 @@ func getUptime() Uptime {
 	return Uptime(uptime)
 }
 
-func getShell() Shell {
+func GetShell() Shell {
 	shellPieces := strings.SplitAfter(os.Getenv("SHELL"), "/")
 	return Shell(shellPieces[len(shellPieces)-1])
 }
 
-func getRawTotalMemory() Memory {
+func GetRawTotalMemory() Memory {
 	memInfoBytes, error := os.ReadFile("/proc/meminfo")
 	if error != nil {
 		log.Fatal(error)
@@ -123,7 +97,7 @@ func getRawTotalMemory() Memory {
 	return Memory(totalRawMemory)
 }
 
-func getRawFreeMemory() Memory {
+func GetRawFreeMemory() Memory {
 	memInfoBytes, error := os.ReadFile("/proc/meminfo")
 	if error != nil {
 		log.Fatal(error)
@@ -140,11 +114,11 @@ func getRawFreeMemory() Memory {
 	return Memory(totalRawMemory)
 }
 
-func getTotalMemory() Memory {
-	return Memory(getRawTotalMemory() / 1024)
+func GetTotalMemory() Memory {
+	return Memory(GetRawTotalMemory() / 1024)
 }
 
-func getPackages() Packages {
+func GetPackages() Packages {
 	packagesBytes, error := exec.Command("pacman", "-Q").Output()
 	if error != nil {
 		log.Fatal(error)
@@ -155,7 +129,7 @@ func getPackages() Packages {
 	return Packages(lines)
 }
 
-func getUsedMemory() Memory {
-	rawFreeMemory := getRawTotalMemory() - getRawFreeMemory()
+func GetUsedMemory() Memory {
+	rawFreeMemory := GetRawTotalMemory() - GetRawFreeMemory()
 	return Memory(rawFreeMemory / 1024)
 }

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/adrg/xdg"
@@ -11,20 +12,29 @@ import (
 )
 
 type Config struct {
-	Theme  ThemeName
-	Style  StyleName
-	Border BorderColorName
-	Dot    Dot
+	Theme         ThemeName
+	Border        BorderColorName
+	Dot           Dot
+	Printables    []PrintableInfo
+	DisableColors bool
 }
 type RawConfig struct {
-	Theme  string
-	Style  string
-	Border string
-	Dot    string
+	Theme         string
+	Border        string
+	Dot           string
+	Fields        []string
+	DisableColors bool
 }
 
 func GetConfig() Config {
-	config := Config{"6-colors", "nitch", "white", " "}
+	var fields []PrintableInfo
+	config := Config{
+		"6-colors",
+		"white",
+		" ",
+		fields,
+		false,
+	}
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
 	if errors.Is(err, os.ErrNotExist) {
@@ -36,17 +46,43 @@ func GetConfig() Config {
 		if valid, theme := ValidTheme(rawconfig.Theme); valid {
 			config.Theme = theme
 		}
-		if valid, style := ValidStyle(rawconfig.Style); valid {
-			config.Style = style
-		}
 		if valid, border := ValidBorder(rawconfig.Border); valid {
 			config.Border = border
 		}
 		if valid, dot := ValidDot(rawconfig.Dot); valid {
 			config.Dot = dot
 		}
+		config.Printables = SetValidPrintables(rawconfig.Fields)
+		config.DisableColors = rawconfig.DisableColors
 		return config
 	}
+}
+
+func SetValidPrintables(fields []string) []PrintableInfo {
+	var printables []PrintableInfo
+	for _, field := range fields {
+		switch field {
+		case "user":
+			printables = append(printables, PrintableInfo{"  " + field + "   ", string(GetUserName())})
+		case "host":
+			printables = append(printables, PrintableInfo{"  " + field + "   ", string(GetHostName())})
+		case "distro":
+			printables = append(printables, PrintableInfo{"  " + field + "  ", string(GetDistro())})
+		case "kernel":
+			printables = append(printables, PrintableInfo{"  " + field + " ", string(GetKernel())})
+		case "uptime":
+			printables = append(printables, PrintableInfo{"  " + field + " ", string(GetUptime())})
+		case "shell":
+			printables = append(printables, PrintableInfo{"  " + field + "  ", string(GetShell())})
+		case "pkgs":
+			printables = append(printables, PrintableInfo{"󰏖  " + field + "   ", strconv.Itoa(int(GetPackages()))})
+		case "memory":
+			memoryString := strconv.Itoa(int(GetUsedMemory())) + "|" + strconv.Itoa(int(GetTotalMemory()))
+			printables = append(printables, PrintableInfo{"󰍛  " + field + " ", memoryString})
+
+		}
+	}
+	return printables
 }
 
 func parseConfig(in []byte) RawConfig {
@@ -54,7 +90,10 @@ func parseConfig(in []byte) RawConfig {
 	if err := toml.Unmarshal(in, &v); err != nil {
 		log.Fatal(err)
 	}
-	return RawConfig{v.Theme, v.Style, v.Border, v.Dot}
+	// for i := range v.Fields {
+	// 	println(v.Fields[i])
+	// }
+	return RawConfig{v.Theme, v.Border, v.Dot, v.Fields, v.DisableColors}
 }
 
 func ValidTheme(theme string) (bool, ThemeName) {
@@ -69,16 +108,6 @@ func ValidTheme(theme string) (bool, ThemeName) {
 		"random-6-colors",
 		"random-6-colors-high-intensity":
 		return true, ThemeName(theme)
-	default:
-		return false, ""
-
-	}
-}
-
-func ValidStyle(style string) (bool, StyleName) {
-	switch style {
-	case "nitch", "classic":
-		return true, StyleName(style)
 	default:
 		return false, ""
 
