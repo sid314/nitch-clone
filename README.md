@@ -17,6 +17,7 @@ This program is inspired by
 - Different icons
 - No word art (yet)
 - Themes
+- Fields can be disabled
 
 ## Dependencies
 
@@ -25,7 +26,7 @@ to be available.
 
 ## Config and Themes
 
-Themes ~~and styles~~ (WIP) can be set through `config.toml`
+Themes can be set through `config.toml`
 placed in `$XDG_HOME/nitch-clone`
 (It will be`~/.config/nitch-clone/config.toml` for most users).
 
@@ -47,8 +48,9 @@ independently of the theme.
 ## Building and Running
 
 > [!NOTE]
-> For building and running `go` must be installed.
-> This has only been tested on EndeavourOS.
+> For building `go` must be installed.
+> This has only been tested on EndeavourOS, ArchLinux,
+> Ubuntu, Fedora and Debian.
 
 1. Clone this [repository](https://github.com/sid314/nitch-clone).
 2. Run `cd nitch-clone`

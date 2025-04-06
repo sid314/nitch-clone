@@ -9,9 +9,20 @@ theme = "6-colors"
 # "6-colors-high-intensity"
 # "random-6-colors"
 # "random-6-colors-high-intensity"
-style = "nitch"
-# styles can be only "nitch" for now 
 border = "white"
 # border can be "white", "none","theme"
 dot = ""
 # dot can be any non whitespace string
+disableColors = false
+# to disable last line
+fields = [
+  "user",
+  "shell",
+  "pkgs",
+  "host",
+  "kernel",
+  "uptime",
+  "memory",
+  "distro",
+]
+# these are all the available fields for now
