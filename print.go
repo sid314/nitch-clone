@@ -27,26 +27,26 @@ func Print() {
 	disableColors := config.DisableColors
 	length := largestFieldLength(config.DisableColors, printables)
 	dot := theme.dot
-	theme.border.Printf("╭")
+	theme.border.Printf("  ╭")
 	for range length {
 		theme.border.Printf("─")
 	}
 	theme.border.Printf("╮\n")
 	for i, j := 0, 0; i < len(printables); i++ {
 
-		theme.border.Printf("│ ")
+		theme.border.Printf("  │ ")
 		theme.colors[j].Print(printables[i].Field)
 		theme.border.Printf("│ ")
 		theme.colors[j+1].Printf("%s\n", printables[i].Value)
 		j += 2
 	}
 	if !disableColors {
-		theme.border.Printf("├")
+		theme.border.Printf("  ├")
 		for range length {
 			theme.border.Printf("─")
 		}
 		theme.border.Printf("┤ \n")
-		theme.border.Printf("│ ")
+		theme.border.Printf("  │ ")
 		theme.colors[0].Printf("󰏘 colors")
 		for range length - 9 {
 			theme.border.Print(" ")
@@ -57,7 +57,7 @@ func Print() {
 		}
 		theme.border.Print("\n")
 	}
-	theme.border.Printf("╰")
+	theme.border.Printf("  ╰")
 	for range length {
 		theme.border.Printf("─")
 	}
