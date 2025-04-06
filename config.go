@@ -67,7 +67,7 @@ func SetValidPrintables(fields []string) []PrintableInfo {
 		case "host":
 			printables = append(printables, PrintableInfo{"  " + field + "   ", string(GetHostName())})
 		case "distro":
-			printables = append(printables, PrintableInfo{"  " + field + "  ", string(GetDistro())})
+			printables = append(printables, PrintableInfo{"  " + field + " ", string(GetDistro())})
 		case "kernel":
 			printables = append(printables, PrintableInfo{"  " + field + " ", string(GetKernel())})
 		case "uptime":
