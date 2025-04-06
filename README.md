@@ -8,6 +8,10 @@
   - [Building and running](#building-and-running)
   <!--toc:end-->
 
+## ![Screenschot](./screenshot.png)
+
+---
+
 This program is inspired by
 [nitch](https://github.com/ssleert/nitch) but written in Go.
 
