@@ -119,7 +119,29 @@ func GetTotalMemory() Memory {
 }
 
 func GetPackages() Packages {
-	packagesBytes, error := exec.Command("pacman", "-Q").Output()
+	var command *exec.Cmd
+	packageManagers := []string{"pacman", "dnf", "rpm", "apt"}
+	var packageManager string
+	for i := range packageManagers {
+		maybePackageManager, _ := exec.Command("which", packageManagers[i]).Output()
+		if string(maybePackageManager) != "" {
+			packageManager = packageManagers[i]
+		}
+
+	}
+	switch packageManager {
+	case "pacman":
+		command = exec.Command("pacman", "-Q")
+	case "apt":
+		command = exec.Command("apt", "list", "--installed")
+	case "dnf":
+		command = exec.Command("dnf", "list", "--installed")
+	case "rpm":
+		command = exec.Command("rpm", "-qa")
+	default:
+		command = exec.Command("echo", "boo")
+	}
+	packagesBytes, error := command.Output()
 	if error != nil {
 		log.Fatal(error)
 	}
