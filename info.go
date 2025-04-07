@@ -61,9 +61,7 @@ func GetKernel() Kernel {
 	}
 	var buffer bytes.Buffer
 	buffer.Write(u.Release[:])
-	kernel := buffer.String()
-	kernel = strings.TrimSpace(kernel)
-	return Kernel(kernel)
+	return Kernel(u.Release[:bytes.IndexByte(u.Release[:], 0)])
 }
 
 func GetUptime() Uptime {
