@@ -25,8 +25,7 @@ This program is inspired by
 
 ## Dependencies
 
-This program requires `uname` and `uptime`
-to be available.
+This program requires `go` to build.
 
 ## Config and Themes
 
