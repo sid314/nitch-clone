@@ -144,7 +144,7 @@ func sixHighIntensityColorPalette() Palette {
 }
 
 func randomSixColorPalette() Palette {
-	colors := [16]*color.Color{
+	palette := [16]*color.Color{
 		color.New(color.FgBlue),
 		color.New(color.FgBlue),
 		color.New(color.FgRed),
@@ -162,17 +162,14 @@ func randomSixColorPalette() Palette {
 		color.New(color.FgRed),
 		color.New(color.FgRed),
 	}
-	var palette Palette
-	for i := range len(palette) {
-		random := rand.Intn(16)
-		palette[i] = colors[random]
-
-	}
+	rand.Shuffle(len(palette), func(i, j int) {
+		palette[i], palette[j] = palette[j], palette[i]
+	})
 	return palette
 }
 
 func randomHighIntensitySixcolorPalette() Palette {
-	colors := [16]*color.Color{
+	palette := [16]*color.Color{
 		color.New(color.FgHiBlue),
 		color.New(color.FgHiBlue),
 		color.New(color.FgHiRed),
@@ -190,12 +187,9 @@ func randomHighIntensitySixcolorPalette() Palette {
 		color.New(color.FgHiRed),
 		color.New(color.FgHiRed),
 	}
-	var palette Palette
-	for i := range len(palette) {
-		random := rand.Intn(16)
-		palette[i] = colors[random]
-
-	}
+	rand.Shuffle(len(palette), func(i, j int) {
+		palette[i], palette[j] = palette[j], palette[i]
+	})
 	return palette
 }
 
