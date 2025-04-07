@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -77,7 +78,7 @@ func SetValidPrintables(fields []string) []PrintableInfo {
 		case "pkgs":
 			printables = append(printables, PrintableInfo{"󰏖  " + field + "   ", strconv.Itoa(int(GetPackages()))})
 		case "memory":
-			memoryString := strconv.Itoa(int(GetUsedMemory())) + "|" + strconv.Itoa(int(GetTotalMemory()))
+			memoryString := fmt.Sprintf("%d | %d MiB", GetUsedMemory(), GetTotalMemory())
 			printables = append(printables, PrintableInfo{"󰍛  " + field + " ", memoryString})
 
 		}
