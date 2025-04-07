@@ -1,12 +1,17 @@
 package main
 
 import (
+	"bytes"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"os/user"
 	"strconv"
 	"strings"
+	"time"
+
+	"golang.org/x/sys/unix"
 )
 
 type (
@@ -49,30 +54,46 @@ func GetDistro() Distro {
 }
 
 func GetKernel() Kernel {
-	kernelBytes, error := exec.Command("uname", "-r").Output()
-	if error != nil {
-		log.Fatal(error)
+	u := unix.Utsname{}
+	err := unix.Uname(&u)
+	if err != nil {
+		log.Fatal(err)
 	}
-	kernel := string(kernelBytes)
+	var buffer bytes.Buffer
+	buffer.Write(u.Release[:])
+	kernel := buffer.String()
 	kernel = strings.TrimSpace(kernel)
 	return Kernel(kernel)
 }
 
 func GetUptime() Uptime {
-	uptimeBytes, error := exec.Command("uptime", "-p").Output()
-	if error != nil {
-		log.Fatal(error)
+	sysinfo := &unix.Sysinfo_t{}
+	if err := unix.Sysinfo(sysinfo); err != nil {
+		log.Fatal(err)
 	}
+	uptimeDuration := time.Duration(sysinfo.Uptime * int64(time.Second))
+	seconds := int(uptimeDuration.Seconds())
+	days := seconds / 86400
+	seconds = seconds % 86400
+	hours := seconds / 3600
+	seconds = seconds % 3600
+	minutes := seconds / 60
+	seconds = seconds % 60
 
-	uptime := string(uptimeBytes)
-	uptime = strings.ReplaceAll(uptime, "minutes", "m")
-	uptime = strings.ReplaceAll(uptime, "hours", "h")
-	uptime = strings.ReplaceAll(uptime, "days", "d")
-	uptime = strings.ReplaceAll(uptime, "minute", "m")
-	uptime = strings.ReplaceAll(uptime, "hour", "h")
-	uptime = strings.ReplaceAll(uptime, "day", "d")
-	uptime = strings.TrimSpace(uptime)
-	return Uptime(uptime)
+	var builder strings.Builder
+	if days > 0 {
+		builder.WriteString(fmt.Sprintf("%dd ", days))
+	}
+	if hours > 0 {
+		builder.WriteString(fmt.Sprintf("%dh ", hours))
+	}
+	if minutes > 0 {
+		builder.WriteString(fmt.Sprintf("%dm ", minutes))
+	}
+	if seconds > 0 {
+		builder.WriteString(fmt.Sprintf("%ds ", seconds))
+	}
+	return Uptime(builder.String())
 }
 
 func GetShell() Shell {
