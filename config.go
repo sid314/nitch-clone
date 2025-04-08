@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -38,9 +37,7 @@ func GetConfig() Config {
 	}
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
-	if errors.Is(err, os.ErrNotExist) {
-		return config
-	} else if err != nil {
+	if err != nil {
 		return config
 	} else {
 		rawconfig := parseConfig(configFile)
@@ -91,10 +88,13 @@ func parseConfig(in []byte) RawConfig {
 	if err := toml.Unmarshal(in, &v); err != nil {
 		log.Fatal(err)
 	}
-	// for i := range v.Fields {
-	// 	println(v.Fields[i])
-	// }
-	return RawConfig{v.Theme, v.Border, v.Dot, v.Fields, v.DisableColors}
+	return RawConfig{
+		Theme:         v.Theme,
+		Border:        v.Border,
+		Dot:           v.Dot,
+		Fields:        v.Fields,
+		DisableColors: v.DisableColors,
+	}
 }
 
 func ValidTheme(theme string) (bool, ThemeName) {
