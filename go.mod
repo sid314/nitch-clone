@@ -1,4 +1,4 @@
-module nitch-clone
+module github.com/sid314/nitch-clone
 
 go 1.24.1
 
