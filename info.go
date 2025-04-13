@@ -21,9 +21,24 @@ type (
 	Kernel   string
 	Shell    string
 	Uptime   string
+	Desktop  string
+	Terminal string
 	Memory   int
 	Packages int
 )
+
+func GetCurrentDesktop() Desktop {
+	return Desktop(os.Getenv("XDG_CURRENT_DESKTOP"))
+}
+
+func GetTerminal() Terminal {
+	terminal := os.Getenv("TERM_PROGRAM")
+	terminal = strings.TrimSpace(terminal)
+	if terminal == "" {
+		return Terminal(os.Getenv("TERM"))
+	}
+	return Terminal(terminal)
+}
 
 func GetHostName() Hostname {
 	hostname, error := os.Hostname()

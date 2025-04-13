@@ -71,7 +71,11 @@ func SetValidPrintables(fields []string) []PrintableInfo {
 		case "uptime":
 			printables = append(printables, PrintableInfo{"  " + field + " ", string(GetUptime())})
 		case "shell":
-			printables = append(printables, PrintableInfo{"  " + field + "  ", string(GetShell())})
+			printables = append(printables, PrintableInfo{"  " + field + "  ", string(GetShell())})
+		case "de":
+			printables = append(printables, PrintableInfo{"  " + field + "     ", string(GetCurrentDesktop())})
+		case "term":
+			printables = append(printables, PrintableInfo{"  " + field + "   ", string(GetTerminal())})
 		case "pkgs":
 			printables = append(printables, PrintableInfo{"󰏖  " + field + "   ", strconv.Itoa(int(GetPackages()))})
 		case "memory":

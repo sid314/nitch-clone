@@ -38,6 +38,9 @@ func Print() {
 		theme.colors[j].Print(printables[i].Field)
 		theme.border.Printf("│ ")
 		theme.colors[j+1].Printf("%s\n", printables[i].Value)
+		if j >= 14 {
+			j = -2
+		}
 		j += 2
 	}
 	if !disableColors {
