@@ -33,13 +33,13 @@ func Color(namedColor catppuccin.Color) *color.Color {
 
 func IsCatppuccin(theme ThemeName) (bool, catppuccin.Flavor) {
 	switch theme {
-	case "catppuccin-mocha":
+	case "catppuccin-mocha", "catppuccin-mocha-asymmetric":
 		return true, catppuccin.Mocha
-	case "catppuccin-frappe":
+	case "catppuccin-frappe", "catppuccin-frappe-asymmetric":
 		return true, catppuccin.Frappe
-	case "catppuccin-latte":
+	case "catppuccin-latte", "catppuccin-latte-asymmetric":
 		return true, catppuccin.Latte
-	case "catppuccin-macchiato":
+	case "catppuccin-macchiato", "catppuccin-macchiato-asymmetric":
 		return true, catppuccin.Macchiato
 	default:
 		return false, nil
@@ -50,7 +50,9 @@ func GeneratePalette(theme ThemeName) Palette {
 	var colors Palette
 	switch theme {
 	case "catppuccin-mocha", "catppuccin-latte", "catppuccin-frappe", "catppuccin-macchiato":
-		colors = catpuccinPalette(theme)
+		colors = catpuccinSymPalette(theme)
+	case "catppuccin-mocha-asymmetric", "catppuccin-latte-asymmetric", "catppuccin-frappe-asymmetric", "catppuccin-macchiato-asymmetric":
+		colors = catpuccinAsymPalette(theme)
 	case "6-colors":
 		colors = sixColorPalette()
 	case "6-colors-high-intensity":
@@ -193,7 +195,7 @@ func randomHighIntensitySixcolorPalette() Palette {
 	return palette
 }
 
-func catpuccinPalette(theme ThemeName) Palette {
+func catpuccinSymPalette(theme ThemeName) Palette {
 	var flavour catppuccin.Flavor
 	var palette Palette
 	switch theme {
@@ -204,6 +206,38 @@ func catpuccinPalette(theme ThemeName) Palette {
 	case "catppuccin-frappe":
 		flavour = catppuccin.Frappe
 	case "catppuccin-latte":
+		flavour = catppuccin.Latte
+	}
+	palette[0] = Color(flavour.Sapphire())
+	palette[1] = Color(flavour.Sapphire())
+	palette[2] = Color(flavour.Lavender())
+	palette[3] = Color(flavour.Lavender())
+	palette[4] = Color(flavour.Maroon())
+	palette[5] = Color(flavour.Maroon())
+	palette[6] = Color(flavour.Teal())
+	palette[7] = Color(flavour.Teal())
+	palette[8] = Color(flavour.Green())
+	palette[9] = Color(flavour.Green())
+	palette[10] = Color(flavour.Pink())
+	palette[11] = Color(flavour.Pink())
+	palette[12] = Color(flavour.Rosewater())
+	palette[13] = Color(flavour.Rosewater())
+	palette[14] = Color(flavour.Mauve())
+	palette[15] = Color(flavour.Mauve())
+	return palette
+}
+
+func catpuccinAsymPalette(theme ThemeName) Palette {
+	var flavour catppuccin.Flavor
+	var palette Palette
+	switch theme {
+	case "catppuccin-mocha-asymmetric":
+		flavour = catppuccin.Mocha
+	case "catppuccin-macchiato-asymmetric":
+		flavour = catppuccin.Macchiato
+	case "catppuccin-frappe-asymmetric":
+		flavour = catppuccin.Frappe
+	case "catppuccin-latte-asymmetric":
 		flavour = catppuccin.Latte
 	}
 	palette[0] = Color(flavour.Sky())
@@ -222,5 +256,8 @@ func catpuccinPalette(theme ThemeName) Palette {
 	palette[13] = Color(flavour.Flamingo())
 	palette[14] = Color(flavour.Pink())
 	palette[15] = Color(flavour.Lavender())
+	rand.Shuffle(len(palette), func(i, j int) {
+		palette[i], palette[j] = palette[j], palette[i]
+	})
 	return palette
 }
