@@ -1,6 +1,9 @@
 package main
 
-// By default palettes contain 16 colors. If a theme has any less, the remaining are set to white
+import (
+	"github.com/rivo/uniseg"
+)
+
 type PrintableInfo struct {
 	Field string
 	Value string
@@ -9,23 +12,34 @@ type PrintableInfo struct {
 func largestFieldLength(disableColors bool, printables []PrintableInfo) int {
 	largestFieldLength := 0
 	if !disableColors {
-		largestFieldLength = 10
+		largestFieldLength = 8
 	}
 	for _, printable := range printables {
-		if l := len(printable.Field); l > largestFieldLength {
+		if l := uniseg.StringWidth(printable.Field); l > largestFieldLength {
 			largestFieldLength = l
 		}
 	}
-	return largestFieldLength - 2
+	return largestFieldLength
+}
+
+func paddedPrintables(printables []PrintableInfo, requiredLength int) []PrintableInfo {
+	for i, printable := range printables {
+		for uniseg.StringWidth(printable.Field) < requiredLength+1 {
+			printable.Field = printable.Field + " "
+		}
+		printables[i].Field = printable.Field
+	}
+	return printables
 }
 
 func Print() {
 	config := GetConfig()
 	theme := GenerateTheme(config)
-	// info := GetInfo()
 	printables := config.Printables
 	disableColors := config.DisableColors
 	length := largestFieldLength(config.DisableColors, printables)
+	printables = paddedPrintables(printables, length)
+	length = length + 2
 	dot := theme.dot
 	theme.border.Printf("  ╭")
 	for range length {
@@ -33,7 +47,6 @@ func Print() {
 	}
 	theme.border.Printf("╮\n")
 	for i, j := 0, 0; i < len(printables); i++ {
-
 		theme.border.Printf("  │ ")
 		theme.colors[j].Print(printables[i].Field)
 		theme.border.Printf("│ ")

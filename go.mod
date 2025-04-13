@@ -7,6 +7,7 @@ require (
 	github.com/catppuccin/go v0.3.0
 	github.com/fatih/color v1.18.0
 	github.com/pelletier/go-toml/v2 v2.2.3
+	github.com/rivo/uniseg v0.4.7
 	golang.org/x/sys v0.29.0
 )
 
