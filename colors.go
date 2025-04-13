@@ -12,15 +12,21 @@ type (
 )
 
 type (
-	StyleName       string
-	ThemeName       string
+	StyleName   string
+	ThemeName   string
+	Colorscheme struct {
+		name   string
+		colors []*color.Color
+	}
 	BorderColorName string
 	Dot             string
 	Theme           struct {
-		name   ThemeName
-		colors Palette
-		border *color.Color
-		dot    Dot
+		name      ThemeName
+		colors    Palette
+		border    *color.Color
+		dot       Dot
+		symmetric bool
+		random    bool
 	}
 )
 
