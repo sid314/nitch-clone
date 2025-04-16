@@ -17,6 +17,7 @@ type Config struct {
 	Dot           Dot
 	Printables    []PrintableInfo
 	DisableColors bool
+	Slow          bool
 }
 type RawConfig struct {
 	Theme         string
@@ -24,6 +25,7 @@ type RawConfig struct {
 	Dot           string
 	Fields        []string
 	DisableColors bool
+	Slow          bool
 }
 
 func GetConfig() Config {
@@ -33,6 +35,7 @@ func GetConfig() Config {
 		"white",
 		" ",
 		fields,
+		false,
 		false,
 	}
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
