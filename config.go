@@ -55,6 +55,7 @@ func GetConfig() Config {
 		}
 		config.Printables = SetValidPrintables(rawconfig.Fields)
 		config.DisableColors = rawconfig.DisableColors
+		config.Slow = rawconfig.Slow
 		return config
 	}
 }
@@ -101,6 +102,7 @@ func parseConfig(in []byte) RawConfig {
 		Dot:           v.Dot,
 		Fields:        v.Fields,
 		DisableColors: v.DisableColors,
+		Slow:          v.Slow,
 	}
 }
 
