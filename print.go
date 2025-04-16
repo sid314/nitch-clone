@@ -34,8 +34,16 @@ func paddedPrintables(printables []PrintableInfo, requiredLength int) []Printabl
 	return printables
 }
 
-func fastPrint() {
+func Print() {
 	config := GetConfig()
+	if config.Slow {
+		slowPrint(config)
+	} else {
+		fastPrint(config)
+	}
+}
+
+func fastPrint(config Config) {
 	theme := GenerateTheme(config)
 	printables := config.Printables
 	disableColors := config.DisableColors
@@ -82,8 +90,7 @@ func fastPrint() {
 	theme.border.Printf("╯\n")
 }
 
-func slowPrint() {
-	config := GetConfig()
+func slowPrint(config Config) {
 	theme := GenerateTheme(config)
 	printables := config.Printables
 	disableColors := config.DisableColors
