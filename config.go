@@ -65,26 +65,26 @@ func SetValidPrintables(fields []string) []PrintableInfo {
 	for _, field := range fields {
 		switch field {
 		case "user":
-			printables = append(printables, PrintableInfo{"  " + field, string(GetUserName())})
+			printables = append(printables, PrintableInfo{"  " + field, string(GetUserName())})
 		case "host":
 			printables = append(printables, PrintableInfo{"  " + field, string(GetHostName())})
 		case "distro":
-			printables = append(printables, PrintableInfo{"  " + field, string(GetDistro())})
+			printables = append(printables, PrintableInfo{"  " + field, string(GetDistro())})
 		case "kernel":
-			printables = append(printables, PrintableInfo{"  " + field, string(GetKernel())})
+			printables = append(printables, PrintableInfo{"  " + field, string(GetKernel())})
 		case "uptime":
 			printables = append(printables, PrintableInfo{"  " + field, string(GetUptime())})
 		case "shell":
-			printables = append(printables, PrintableInfo{"  " + field, string(GetShell())})
+			printables = append(printables, PrintableInfo{"  " + field, string(GetShell())})
 		case "de":
-			printables = append(printables, PrintableInfo{"  " + field, string(GetCurrentDesktop())})
+			printables = append(printables, PrintableInfo{"  " + field, string(GetCurrentDesktop())})
 		case "term":
 			printables = append(printables, PrintableInfo{"  " + field, string(GetTerminal())})
 		case "pkgs":
-			printables = append(printables, PrintableInfo{"󰏖  " + field, strconv.Itoa(int(GetPackages()))})
+			printables = append(printables, PrintableInfo{"  " + field, strconv.Itoa(int(GetPackages()))})
 		case "memory":
 			memoryString := fmt.Sprintf("%d | %d MiB", GetUsedMemory(), GetTotalMemory())
-			printables = append(printables, PrintableInfo{"󰍛  " + field, memoryString})
+			printables = append(printables, PrintableInfo{"  " + field, memoryString})
 
 		}
 	}

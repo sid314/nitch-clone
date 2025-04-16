@@ -73,7 +73,7 @@ func fastPrint(config Config) {
 		}
 		theme.border.Printf("┤ \n")
 		theme.border.Printf("  │ ")
-		theme.colors[0].Printf("󰏘 colors")
+		theme.colors[0].Printf("󰸌  colors")
 		for range length - 9 {
 			theme.border.Print(" ")
 		}
@@ -145,12 +145,12 @@ func slowPrint(config Config) {
 		theme.border.Printf("  │ ")
 		time.Sleep(delay)
 		// theme.colors[0].Printf("󰏘 colors")
-		colorsLabel := uniseg.NewGraphemes("󰏘 colors")
+		colorsLabel := uniseg.NewGraphemes("  colors")
 		for colorsLabel.Next() {
 			theme.colors[0].Print(string(colorsLabel.Bytes()))
 			time.Sleep(delay)
 		}
-		for range length - 9 {
+		for range length - 10 {
 			theme.border.Print(" ")
 		}
 		theme.border.Printf("│ ")
