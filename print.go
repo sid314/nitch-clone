@@ -61,7 +61,7 @@ func fastPrint(config Config) {
 		theme.border.Printf("┤ \n")
 		theme.border.Printf("  │ ")
 		theme.colors[0].Printf("󰸌  colors")
-		for range length - 9 {
+		for range length - 10 {
 			theme.border.Print(" ")
 		}
 		theme.border.Printf("│ ")
