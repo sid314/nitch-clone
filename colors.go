@@ -10,16 +10,8 @@ type (
 )
 
 type (
-	StyleName   string
-	ThemeName   string
-	Colorscheme interface {
-		Colors() []*color.Color
-		// returns all the colors provided by a Colorscheme
-		PreferredColors() []*color.Color
-		// return only 16 colors which are to be used for printing
-		// if PreferredColors() dosent make sense for a Colorscheme
-		// then just wrap Colors() in PreferredColors()
-	}
+	StyleName       string
+	ThemeName       string
 	BorderColorName string
 	Dot             string
 	Theme           struct {
@@ -31,10 +23,6 @@ type (
 		random    bool
 	}
 )
-
-func GeneratePaletteFromColorscheme(colorScheme Colorscheme) Palette {
-	return Palette(colorScheme.PreferredColors())
-}
 
 func Color(namedColor catppuccin.Color) *color.Color {
 	r, g, b, _ := namedColor.RGBA()
