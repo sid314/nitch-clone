@@ -11,19 +11,6 @@ type PrintableInfo struct {
 	Value string
 }
 
-func largestFieldLength(disableColors bool, printables []PrintableInfo) int {
-	largestFieldLength := 0
-	if !disableColors {
-		largestFieldLength = 8
-	}
-	for _, printable := range printables {
-		if l := uniseg.StringWidth(printable.Field); l > largestFieldLength {
-			largestFieldLength = l
-		}
-	}
-	return largestFieldLength
-}
-
 func paddedPrintables(printables []PrintableInfo, requiredLength int) []PrintableInfo {
 	for i, printable := range printables {
 		for uniseg.StringWidth(printable.Field) < requiredLength+1 {
@@ -92,6 +79,7 @@ func fastPrint(config Config) {
 
 func slowPrint(config Config) {
 	theme := GenerateTheme(config)
+	println(theme.colors)
 	printables := config.Printables
 	disableColors := config.DisableColors
 	length := largestFieldLength(config.DisableColors, printables)

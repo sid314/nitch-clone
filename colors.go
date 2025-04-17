@@ -8,7 +8,7 @@ import (
 )
 
 type (
-	Palette [16]*color.Color
+	Palette []*color.Color
 )
 
 type (
@@ -17,7 +17,7 @@ type (
 	Colorscheme interface {
 		Colors() []*color.Color
 		// returns all the colors provided by a Colorscheme
-		PreferredColors() [16]*color.Color
+		PreferredColors() []*color.Color
 		// return only 16 colors which are to be used for printing
 		// if PreferredColors() dosent make sense for a Colorscheme
 		// then just wrap Colors() in PreferredColors()
@@ -86,7 +86,8 @@ func GeneratePalette(theme ThemeName) Palette {
 func GenerateTheme(config Config) Theme {
 	var theme Theme
 	theme.name = config.Theme
-	theme.colors = GeneratePalette(config.Theme)
+	// theme.colors = GeneratePalette(config.Theme)
+	theme.colors = wrap(len(config.Printables)*2, GeneratePalette(config.Theme))
 	switch config.Border {
 	case "white":
 		theme.border = color.RGB(255, 255, 255)
@@ -111,56 +112,58 @@ func GenerateTheme(config Config) Theme {
 
 func grayscalePalette() Palette {
 	var palette Palette
-	for i := range palette {
-		palette[i] = color.RGB(255, 255, 255)
+	for range palette {
+		palette = append(palette, color.RGB(255, 255, 255))
 	}
 	return palette
 }
 
 func sixColorPalette() Palette {
 	var palette Palette
-	palette[0] = color.New(color.FgBlue)
-	palette[1] = color.New(color.FgBlue)
-	palette[2] = color.New(color.FgRed)
-	palette[3] = color.New(color.FgRed)
-	palette[4] = color.New(color.FgYellow)
-	palette[5] = color.New(color.FgYellow)
-	palette[6] = color.New(color.FgCyan)
-	palette[7] = color.New(color.FgCyan)
-	palette[8] = color.New(color.FgGreen)
-	palette[9] = color.New(color.FgGreen)
-	palette[10] = color.New(color.FgMagenta)
-	palette[11] = color.New(color.FgMagenta)
-	palette[12] = color.New(color.FgRed)
-	palette[13] = color.New(color.FgRed)
-	palette[14] = color.New(color.FgYellow)
-	palette[15] = color.New(color.FgYellow)
+	palette = append(palette, color.New(color.FgBlue))
+	// palette[0] = color.New(color.FgBlue)
+	// palette[1] = color.New(color.FgBlue)
+	// palette[2] = color.New(color.FgRed)
+	// palette[3] = color.New(color.FgRed)
+	// palette[4] = color.New(color.FgYellow)
+	// palette[5] = color.New(color.FgYellow)
+	// palette[6] = color.New(color.FgCyan)
+	// palette[7] = color.New(color.FgCyan)
+	// palette[8] = color.New(color.FgGreen)
+	// palette[9] = color.New(color.FgGreen)
+	// palette[10] = color.New(color.FgMagenta)
+	// palette[11] = color.New(color.FgMagenta)
+	// palette[12] = color.New(color.FgRed)
+	// palette[13] = color.New(color.FgRed)
+	// palette[14] = color.New(color.FgYellow)
+	// palette[15] = color.New(color.FgYellow)
 	return palette
 }
 
 func sixHighIntensityColorPalette() Palette {
 	var palette Palette
-	palette[0] = color.New(color.FgHiBlue)
-	palette[1] = color.New(color.FgHiBlue)
-	palette[2] = color.New(color.FgHiRed)
-	palette[3] = color.New(color.FgHiRed)
-	palette[4] = color.New(color.FgHiYellow)
-	palette[5] = color.New(color.FgHiYellow)
-	palette[6] = color.New(color.FgHiCyan)
-	palette[7] = color.New(color.FgHiCyan)
-	palette[8] = color.New(color.FgHiGreen)
-	palette[9] = color.New(color.FgHiGreen)
-	palette[10] = color.New(color.FgHiMagenta)
-	palette[11] = color.New(color.FgHiMagenta)
-	palette[12] = color.New(color.FgHiRed)
-	palette[13] = color.New(color.FgHiRed)
-	palette[14] = color.New(color.FgHiYellow)
-	palette[15] = color.New(color.FgHiYellow)
+	palette = append(palette, color.New(color.FgHiBlue))
+	// palette[0] = color.New(color.FgHiBlue)
+	// palette[1] = color.New(color.FgHiBlue)
+	// palette[2] = color.New(color.FgHiRed)
+	// palette[3] = color.New(color.FgHiRed)
+	// palette[4] = color.New(color.FgHiYellow)
+	// palette[5] = color.New(color.FgHiYellow)
+	// palette[6] = color.New(color.FgHiCyan)
+	// palette[7] = color.New(color.FgHiCyan)
+	// palette[8] = color.New(color.FgHiGreen)
+	// palette[9] = color.New(color.FgHiGreen)
+	// palette[10] = color.New(color.FgHiMagenta)
+	// palette[11] = color.New(color.FgHiMagenta)
+	// palette[12] = color.New(color.FgHiRed)
+	// palette[13] = color.New(color.FgHiRed)
+	// palette[14] = color.New(color.FgHiYellow)
+	// palette[15] = color.New(color.FgHiYellow)
 	return palette
 }
 
 func randomSixColorPalette() Palette {
-	palette := [16]*color.Color{
+	palette := []*color.Color{
 		color.New(color.FgBlue),
 		color.New(color.FgBlue),
 		color.New(color.FgRed),
@@ -185,7 +188,7 @@ func randomSixColorPalette() Palette {
 }
 
 func randomHighIntensitySixcolorPalette() Palette {
-	palette := [16]*color.Color{
+	palette := []*color.Color{
 		color.New(color.FgHiBlue),
 		color.New(color.FgHiBlue),
 		color.New(color.FgHiRed),
@@ -222,22 +225,28 @@ func catpuccinSymPalette(theme ThemeName) Palette {
 	case "catppuccin-latte":
 		flavour = catppuccin.Latte
 	}
-	palette[0] = Color(flavour.Sapphire())
-	palette[1] = Color(flavour.Sapphire())
-	palette[2] = Color(flavour.Lavender())
-	palette[3] = Color(flavour.Lavender())
-	palette[4] = Color(flavour.Maroon())
-	palette[5] = Color(flavour.Maroon())
-	palette[6] = Color(flavour.Teal())
-	palette[7] = Color(flavour.Teal())
-	palette[8] = Color(flavour.Green())
-	palette[9] = Color(flavour.Green())
-	palette[10] = Color(flavour.Pink())
-	palette[11] = Color(flavour.Pink())
-	palette[12] = Color(flavour.Rosewater())
-	palette[13] = Color(flavour.Rosewater())
-	palette[14] = Color(flavour.Mauve())
-	palette[15] = Color(flavour.Mauve())
+	palette = append(palette, Color(flavour.Sapphire()))
+	palette = append(palette, Color(flavour.Lavender()))
+	palette = append(palette, Color(flavour.Teal()))
+	palette = append(palette, Color(flavour.Green()))
+	palette = append(palette, Color(flavour.Pink()))
+	palette = append(palette, Color(flavour.Rosewater()))
+	palette = append(palette, Color(flavour.Mauve()))
+	// palette[1] = Color(flavour.Sapphire())
+	// palette[2] = Color(flavour.Lavender())
+	// palette[3] = Color(flavour.Lavender())
+	// palette[4] = Color(flavour.Maroon())
+	// palette[5] = Color(flavour.Maroon())
+	// palette[6] = Color(flavour.Teal())
+	// palette[7] = Color(flavour.Teal())
+	// palette[8] = Color(flavour.Green())
+	// palette[9] = Color(flavour.Green())
+	// palette[10] = Color(flavour.Pink())
+	// palette[11] = Color(flavour.Pink())
+	// palette[12] = Color(flavour.Rosewater())
+	// palette[13] = Color(flavour.Rosewater())
+	// palette[14] = Color(flavour.Mauve())
+	// palette[15] = Color(flavour.Mauve())
 	return palette
 }
 
@@ -254,22 +263,23 @@ func catpuccinAsymPalette(theme ThemeName) Palette {
 	case "catppuccin-latte-asymmetric":
 		flavour = catppuccin.Latte
 	}
-	palette[0] = Color(flavour.Sky())
-	palette[1] = Color(flavour.Sapphire())
-	palette[2] = Color(flavour.Lavender())
-	palette[3] = Color(flavour.Mauve())
-	palette[4] = Color(flavour.Blue())
-	palette[5] = Color(flavour.Sky())
-	palette[6] = Color(flavour.Peach())
-	palette[7] = Color(flavour.Yellow())
-	palette[8] = Color(flavour.Red())
-	palette[9] = Color(flavour.Maroon())
-	palette[10] = Color(flavour.Green())
-	palette[11] = Color(flavour.Teal())
-	palette[12] = Color(flavour.Rosewater())
-	palette[13] = Color(flavour.Flamingo())
-	palette[14] = Color(flavour.Pink())
-	palette[15] = Color(flavour.Lavender())
+	palette = append(palette, Color(flavour.Sky()))
+	// palette[0] = Color(flavour.Sky())
+	// palette[1] = Color(flavour.Sapphire())
+	// palette[2] = Color(flavour.Lavender())
+	// palette[3] = Color(flavour.Mauve())
+	// palette[4] = Color(flavour.Blue())
+	// palette[5] = Color(flavour.Sky())
+	// palette[6] = Color(flavour.Peach())
+	// palette[7] = Color(flavour.Yellow())
+	// palette[8] = Color(flavour.Red())
+	// palette[9] = Color(flavour.Maroon())
+	// palette[10] = Color(flavour.Green())
+	// palette[11] = Color(flavour.Teal())
+	// palette[12] = Color(flavour.Rosewater())
+	// palette[13] = Color(flavour.Flamingo())
+	// palette[14] = Color(flavour.Pink())
+	// palette[15] = Color(flavour.Lavender())
 	rand.Shuffle(len(palette), func(i, j int) {
 		palette[i], palette[j] = palette[j], palette[i]
 	})
