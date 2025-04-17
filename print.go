@@ -108,7 +108,7 @@ func slowPrint(config Config) {
 		time.Sleep(delay)
 		value := uniseg.NewGraphemes(printables[i].Value)
 		for value.Next() {
-			theme.colors[j].Print(string(value.Bytes()))
+			theme.colors[j+1].Print(string(value.Bytes()))
 
 			time.Sleep(delay)
 		}

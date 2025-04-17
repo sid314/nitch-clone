@@ -71,6 +71,8 @@ func GetConfig() Config {
 		config.Printables = SetValidPrintables(rawconfig.Fields)
 		config.DisableColors = rawconfig.DisableColors
 		config.Slow = rawconfig.Slow
+		config.Symmetric = rawconfig.Symmetric
+		config.Random = rawconfig.Random
 		return config
 	}
 }
