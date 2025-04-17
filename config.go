@@ -131,14 +131,7 @@ func ValidTheme(theme string) (bool, ThemeName) {
 		"catppuccin-frappe",
 		"catppuccin-latte",
 		"catppuccin-macchiato",
-		"catppuccin-mocha-asymmetric",
-		"catppuccin-frappe-asymmetric",
-		"catppuccin-latte-asymmetric",
-		"catppuccin-macchiato-asymmetric",
-		"grayscale", "6-colors",
-		"6-colors-high-intensity",
-		"random-6-colors",
-		"random-6-colors-high-intensity":
+		"grayscale", "6-colors":
 		return true, ThemeName(theme)
 	default:
 		return false, ""

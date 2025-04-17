@@ -79,7 +79,6 @@ func fastPrint(config Config) {
 
 func slowPrint(config Config) {
 	theme := GenerateTheme(config)
-	println(theme.colors)
 	printables := config.Printables
 	disableColors := config.DisableColors
 	length := largestFieldLength(config.DisableColors, printables)
