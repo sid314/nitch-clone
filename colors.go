@@ -16,7 +16,11 @@ type (
 	ThemeName   string
 	Colorscheme interface {
 		Colors() []*color.Color
+		// returns all the colors provided by a Colorscheme
 		PreferredColors() [16]*color.Color
+		// return only 16 colors which are to be used for printing
+		// if PreferredColors() dosent make sense for a Colorscheme
+		// then just wrap Colors() in PreferredColors()
 	}
 	BorderColorName string
 	Dot             string

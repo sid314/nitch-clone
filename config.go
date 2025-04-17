@@ -12,13 +12,16 @@ import (
 )
 
 type Config struct {
-	Theme         ThemeName
-	Border        BorderColorName
-	Dot           Dot
+	Theme  ThemeName
+	Border BorderColorName
+	Dot    Dot
+	// Printable info means field name, icon and values
 	Printables    []PrintableInfo
 	DisableColors bool
 	Slow          bool
 }
+
+// This will be read directly from the config
 type RawConfig struct {
 	Theme         string
 	Border        string
@@ -30,13 +33,17 @@ type RawConfig struct {
 
 func GetConfig() Config {
 	var fields []PrintableInfo
+	// The default config enables the six-colors theme
+	// with white border and dot set to 
+	// no fields, disableColors set to false and slow mode
+	// set to false
 	config := Config{
-		"6-colors",
-		"white",
-		" ",
-		fields,
-		false,
-		false,
+		Theme:         "6-colors",
+		Border:        "white",
+		Dot:           " ",
+		Printables:    fields,
+		DisableColors: false,
+		Slow:          false,
 	}
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
@@ -44,6 +51,8 @@ func GetConfig() Config {
 		return config
 	} else {
 		rawconfig := parseConfig(configFile)
+		// Whatever config option is defined in the config
+		// and is valid get read and overrides the default config
 		if valid, theme := ValidTheme(rawconfig.Theme); valid {
 			config.Theme = theme
 		}
@@ -61,6 +70,7 @@ func GetConfig() Config {
 }
 
 func SetValidPrintables(fields []string) []PrintableInfo {
+	// Printables are added in the order they appear in the config
 	var printables []PrintableInfo
 	for _, field := range fields {
 		switch field {
