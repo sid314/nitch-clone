@@ -32,6 +32,10 @@ func GetCurrentDesktop() Desktop {
 }
 
 func GetTerminal() Terminal {
+	// First tries to read $TERM_PROGRAM
+	// If that returns an emty string,
+	// then tries to read $TERM
+	// This is very inconsistent and does not work for all terminals
 	terminal := os.Getenv("TERM_PROGRAM")
 	terminal = strings.TrimSpace(terminal)
 	if terminal == "" {
@@ -57,6 +61,7 @@ func GetUserName() Username {
 	return Username(user.Username)
 }
 
+// linux-specific
 func GetDistro() Distro {
 	osReleaseBytes, error := os.ReadFile("/etc/os-release")
 
@@ -152,6 +157,11 @@ func GetTotalMemory() Memory {
 	return Memory(GetRawTotalMemory() / 1024)
 }
 
+// To add a new package manager first add
+// its name to packageManagers
+// then add a case for it and add
+// whatever command it uses to list all installed
+// packages ON SEPARATE LINES
 func GetPackages() Packages {
 	var command *exec.Cmd
 	packageManagers := []string{"pacman", "dnf", "rpm", "apt"}

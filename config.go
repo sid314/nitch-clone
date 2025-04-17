@@ -12,13 +12,18 @@ import (
 )
 
 type Config struct {
-	Theme         ThemeName
-	Border        BorderColorName
-	Dot           Dot
+	Theme  ThemeName
+	Border BorderColorName
+	Dot    Dot
+	// Printable info means field name, icon and values
 	Printables    []PrintableInfo
 	DisableColors bool
 	Slow          bool
+	Symmetric     bool
+	Random        bool
 }
+
+// This will be read directly from the config
 type RawConfig struct {
 	Theme         string
 	Border        string
@@ -26,17 +31,25 @@ type RawConfig struct {
 	Fields        []string
 	DisableColors bool
 	Slow          bool
+	Symmetric     bool
+	Random        bool
 }
 
 func GetConfig() Config {
 	var fields []PrintableInfo
+	// The default config enables the six-colors theme
+	// with white border and dot set to 
+	// no fields, disableColors set to false and slow mode
+	// set to false
 	config := Config{
-		"6-colors",
-		"white",
-		" ",
-		fields,
-		false,
-		false,
+		Theme:         "6-colors",
+		Border:        "white",
+		Dot:           " ",
+		Printables:    fields,
+		DisableColors: false,
+		Slow:          false,
+		Symmetric:     true,
+		Random:        true,
 	}
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
@@ -44,6 +57,8 @@ func GetConfig() Config {
 		return config
 	} else {
 		rawconfig := parseConfig(configFile)
+		// Whatever config option is defined in the config
+		// and is valid get read and overrides the default config
 		if valid, theme := ValidTheme(rawconfig.Theme); valid {
 			config.Theme = theme
 		}
@@ -56,11 +71,14 @@ func GetConfig() Config {
 		config.Printables = SetValidPrintables(rawconfig.Fields)
 		config.DisableColors = rawconfig.DisableColors
 		config.Slow = rawconfig.Slow
+		config.Symmetric = rawconfig.Symmetric
+		config.Random = rawconfig.Random
 		return config
 	}
 }
 
 func SetValidPrintables(fields []string) []PrintableInfo {
+	// Printables are added in the order they appear in the config
 	var printables []PrintableInfo
 	for _, field := range fields {
 		switch field {
@@ -103,6 +121,8 @@ func parseConfig(in []byte) RawConfig {
 		Fields:        v.Fields,
 		DisableColors: v.DisableColors,
 		Slow:          v.Slow,
+		Symmetric:     v.Symmetric,
+		Random:        v.Random,
 	}
 }
 
@@ -113,14 +133,7 @@ func ValidTheme(theme string) (bool, ThemeName) {
 		"catppuccin-frappe",
 		"catppuccin-latte",
 		"catppuccin-macchiato",
-		"catppuccin-mocha-asymmetric",
-		"catppuccin-frappe-asymmetric",
-		"catppuccin-latte-asymmetric",
-		"catppuccin-macchiato-asymmetric",
-		"grayscale", "6-colors",
-		"6-colors-high-intensity",
-		"random-6-colors",
-		"random-6-colors-high-intensity":
+		"grayscale", "6-colors":
 		return true, ThemeName(theme)
 	default:
 		return false, ""
