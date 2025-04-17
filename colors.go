@@ -111,9 +111,7 @@ func GenerateTheme(config Config) Theme {
 
 func grayscalePalette() Palette {
 	var palette Palette
-	for range palette {
-		palette = append(palette, color.RGB(255, 255, 255))
-	}
+	palette = append(palette, color.RGB(255, 255, 255))
 	return palette
 }
 
