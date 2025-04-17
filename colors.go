@@ -14,9 +14,9 @@ type (
 type (
 	StyleName   string
 	ThemeName   string
-	Colorscheme struct {
-		name   string
-		colors []*color.Color
+	Colorscheme interface {
+		Colors() []*color.Color
+		PreferredColors() [16]*color.Color
 	}
 	BorderColorName string
 	Dot             string
@@ -29,6 +29,10 @@ type (
 		random    bool
 	}
 )
+
+func GeneratePaletteFromColorscheme(colorScheme Colorscheme) Palette {
+	return Palette(colorScheme.PreferredColors())
+}
 
 func Color(namedColor catppuccin.Color) *color.Color {
 	r, g, b, _ := namedColor.RGBA()
