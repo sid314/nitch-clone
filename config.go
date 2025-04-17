@@ -42,7 +42,7 @@ func GetConfig() Config {
 	// no fields, disableColors set to false and slow mode
 	// set to false
 	config := Config{
-		Theme:         "6-colors",
+		Theme:         "classic",
 		Border:        "white",
 		Dot:           " ",
 		Printables:    fields,
@@ -134,8 +134,8 @@ func ValidTheme(theme string) (bool, ThemeName) {
 		"catppuccin-latte",
 		"catppuccin-macchiato",
 		"grayscale",
-		"6-colors-high-intensity",
-		"6-colors":
+		"high-intensity",
+		"classic":
 		return true, ThemeName(theme)
 	default:
 		return false, ""

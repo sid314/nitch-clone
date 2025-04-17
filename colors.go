@@ -63,9 +63,9 @@ func GeneratePalette(theme ThemeName) Palette {
 	switch theme {
 	case "catppuccin-mocha", "catppuccin-latte", "catppuccin-frappe", "catppuccin-macchiato":
 		colors = catpuccinPalette(theme)
-	case "6-colors":
+	case "classic":
 		colors = sixColorPalette()
-	case "6-colors-high-intensity":
+	case "high-intensity":
 		colors = sixHighIntensityColorPalette()
 
 	default:
