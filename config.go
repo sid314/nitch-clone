@@ -19,6 +19,8 @@ type Config struct {
 	Printables    []PrintableInfo
 	DisableColors bool
 	Slow          bool
+	Symmetric     bool
+	Random        bool
 }
 
 // This will be read directly from the config
@@ -29,6 +31,8 @@ type RawConfig struct {
 	Fields        []string
 	DisableColors bool
 	Slow          bool
+	Symmetric     bool
+	Random        bool
 }
 
 func GetConfig() Config {
@@ -44,6 +48,8 @@ func GetConfig() Config {
 		Printables:    fields,
 		DisableColors: false,
 		Slow:          false,
+		Symmetric:     true,
+		Random:        true,
 	}
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
@@ -113,6 +119,8 @@ func parseConfig(in []byte) RawConfig {
 		Fields:        v.Fields,
 		DisableColors: v.DisableColors,
 		Slow:          v.Slow,
+		Symmetric:     v.Symmetric,
+		Random:        v.Random,
 	}
 }
 

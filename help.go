@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math/rand"
 	"strings"
 
 	"github.com/rivo/uniseg"
@@ -31,4 +32,20 @@ func wrap(fieldsNumber int, palette Palette) Palette {
 		newPalette = append(newPalette, palette...)
 	}
 	return newPalette
+}
+
+func Mirror(palette Palette) Palette {
+	var newPalette Palette
+	for i := range palette {
+		newPalette = append(newPalette, palette[i])
+		newPalette = append(newPalette, palette[i])
+	}
+	return newPalette
+}
+
+func Randomise(palette Palette) Palette {
+	rand.Shuffle(len(palette), func(i, j int) {
+		palette[i], palette[j] = palette[j], palette[i]
+	})
+	return palette
 }

@@ -87,7 +87,14 @@ func GenerateTheme(config Config) Theme {
 	var theme Theme
 	theme.name = config.Theme
 	// theme.colors = GeneratePalette(config.Theme)
-	theme.colors = wrap(len(config.Printables)*2, GeneratePalette(config.Theme))
+	rawPalette := GeneratePalette(config.Theme)
+	if config.Random {
+		rawPalette = Randomise(rawPalette)
+	}
+	if config.Symmetric {
+		rawPalette = Mirror(rawPalette)
+	}
+	theme.colors = wrap(len(config.Printables)*2, rawPalette)
 	switch config.Border {
 	case "white":
 		theme.border = color.RGB(255, 255, 255)
