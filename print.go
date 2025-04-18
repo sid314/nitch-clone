@@ -48,9 +48,6 @@ func fastPrint(config Config) {
 		theme.colors[j].Print(printables[i].Field)
 		theme.border.Printf("│ ")
 		theme.colors[j+1].Printf("%s\n", printables[i].Value)
-		if j >= 14 {
-			j = -2
-		}
 		j += 2
 	}
 	if !disableColors {
@@ -97,7 +94,6 @@ func slowPrint(config Config) {
 	for i, j := 0, 0; i < len(printables); i++ {
 		theme.border.Printf("  │ ")
 		time.Sleep(delay)
-		// theme.colors[j].Print(printables[i].Field)
 		field := uniseg.NewGraphemes(printables[i].Field)
 		for field.Next() {
 			theme.colors[j].Print(string(field.Bytes()))
@@ -113,10 +109,6 @@ func slowPrint(config Config) {
 			time.Sleep(delay)
 		}
 		theme.colors[j+1].Println()
-		// time.Sleep(delay)
-		if j >= 14 {
-			j = -2
-		}
 		j += 2
 	}
 	if !disableColors {
@@ -131,7 +123,6 @@ func slowPrint(config Config) {
 		time.Sleep(delay)
 		theme.border.Printf("  │ ")
 		time.Sleep(delay)
-		// theme.colors[0].Printf("󰏘 colors")
 		colorsLabel := uniseg.NewGraphemes("  colors")
 		for colorsLabel.Next() {
 			theme.colors[0].Print(string(colorsLabel.Bytes()))
