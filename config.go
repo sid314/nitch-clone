@@ -133,6 +133,9 @@ func ValidTheme(theme string) (bool, ThemeName) {
 		"catppuccin-frappe",
 		"catppuccin-latte",
 		"catppuccin-macchiato",
+		"kanagawa-wave",
+		"kanagawa-lotus",
+		"kanagawa-dragon",
 		"grayscale",
 		"high-intensity",
 		"classic":
