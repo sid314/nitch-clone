@@ -10,16 +10,7 @@ type PrintableInfo struct {
 	Field string
 	Value string
 }
-
-func paddedPrintables(printables []PrintableInfo, requiredLength int) []PrintableInfo {
-	for i, printable := range printables {
-		for uniseg.StringWidth(printable.Field) < requiredLength+1 {
-			printable.Field = printable.Field + " "
-		}
-		printables[i].Field = printable.Field
-	}
-	return printables
-}
+type Printables []*PrintableInfo
 
 func Print() {
 	config := GetConfig()
@@ -27,7 +18,7 @@ func Print() {
 	printables := config.Printables
 	disableColors := config.DisableColors
 	length := largestFieldLength(config.DisableColors, printables)
-	printables = paddedPrintables(printables, length)
+	padPrintables(printables, length)
 	length = length + 2
 	dot := theme.dot
 	var delay time.Duration
@@ -100,4 +91,13 @@ func Print() {
 		time.Sleep(delay)
 	}
 	theme.border.Printf("╯\n")
+}
+
+func padPrintables(printables Printables, requiredLength int) {
+	for i, printable := range printables {
+		for uniseg.StringWidth(printable.Field) < requiredLength+1 {
+			printable.Field = printable.Field + " "
+		}
+		printables[i].Field = printable.Field
+	}
 }

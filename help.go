@@ -20,7 +20,7 @@ func catpuccinToColor(namedColor catppuccin.Color) *color.Color {
 	return color
 }
 
-func largestFieldLength(disableColors bool, printables []PrintableInfo) int {
+func largestFieldLength(disableColors bool, printables Printables) int {
 	largestFieldLength := 0
 	if !disableColors {
 		largestFieldLength = 8
@@ -72,7 +72,7 @@ func HexToColor(hex Hex) *color.Color {
 	return color.RGB(int(r), int(g), int(b))
 }
 
-func FieldsFromPrintableInfo(printables []PrintableInfo) []string {
+func FieldsFromPrintableInfo(printables Printables) []string {
 	var fields []string
 	for i := range printables {
 		fields = append(fields, printables[i].Field)

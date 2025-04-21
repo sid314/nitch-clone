@@ -41,7 +41,7 @@ func GeneratePalette(theme ThemeName) Palette {
 	return colors
 }
 
-func GenerateTheme(config Config) Theme {
+func GenerateTheme(config *Config) *Theme {
 	var theme Theme
 	theme.name = config.Theme
 	// theme.colors = GeneratePalette(config.Theme)
@@ -70,7 +70,7 @@ func GenerateTheme(config Config) Theme {
 			case "kanagawa-lotus":
 				theme.border = HexToColor("#1f1f28")
 			case "kanagawa-dragon":
-				theme.border = HexToColor("#0d0c0c")
+				theme.border = HexToColor("#16161d")
 			default:
 				theme.border = color.New(color.FgWhite)
 			}
@@ -78,5 +78,5 @@ func GenerateTheme(config Config) Theme {
 	}
 
 	theme.dot = config.Dot
-	return theme
+	return &theme
 }
