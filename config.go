@@ -9,6 +9,7 @@ import (
 
 	"github.com/adrg/xdg"
 	"github.com/pelletier/go-toml/v2"
+	flag "github.com/spf13/pflag"
 )
 
 type Config struct {
@@ -35,22 +36,30 @@ type RawConfig struct {
 	Random        bool
 }
 
-func GetConfig() Config {
-	var fields []PrintableInfo
-	// The default config enables the six-colors theme
-	// with white border and dot set to 
-	// no fields, disableColors set to false and slow mode
-	// set to false
-	config := Config{
+var (
+	defaultFields []string = []string{
+		"user",
+		"kernel",
+		"host",
+		"shell",
+		"uptime",
+		"pkgs",
+		"distro",
+	}
+	defaultConfig = Config{
 		Theme:         "classic",
 		Border:        "white",
-		Dot:           " ",
-		Printables:    fields,
+		Dot:           "",
+		Printables:    SetValidPrintables(defaultFields),
 		DisableColors: false,
 		Slow:          false,
 		Symmetric:     true,
 		Random:        true,
 	}
+)
+
+func GetConfig() Config {
+	config := defaultConfig
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
 	if err != nil {
@@ -73,7 +82,41 @@ func GetConfig() Config {
 		config.Slow = rawconfig.Slow
 		config.Symmetric = rawconfig.Symmetric
 		config.Random = rawconfig.Random
+		ParseFlags(&config)
 		return config
+	}
+}
+
+func ParseFlags(config *Config) {
+	slow := flag.BoolP("slow", "s", config.Slow, "print slowly")
+	flag.Lookup("slow").NoOptDefVal = "true"
+	random := flag.BoolP("random", "r", config.Random, "randomise colors")
+	flag.Lookup("random").NoOptDefVal = "true"
+	symmetric := flag.BoolP("symmetric", "S", config.Symmetric, "print fields and values in the same color")
+	flag.Lookup("symmetric").NoOptDefVal = "true"
+	disableColors := flag.BoolP("disableColors", "d", config.DisableColors, "disable last line")
+	flag.Lookup("disableColors").NoOptDefVal = "true"
+	dotf := flag.StringP("dot", "D", string(config.Dot), "symbol printed on the last line")
+	themef := flag.StringP("theme", "t", string(config.Theme), "theme")
+	borderf := flag.StringP("border", "b", string(config.Border), "border color")
+	fields := flag.StringSliceP("fields", "f", FieldsFromPrintableInfo(config.Printables), "fields that will be printed")
+	flag.Parse()
+	config.Slow = *slow
+	config.Random = *random
+	config.Symmetric = *symmetric
+	config.DisableColors = *disableColors
+	if valid, dot := ValidDot(*dotf); valid {
+		config.Dot = dot
+	}
+	if valid, theme := ValidTheme(*themef); valid {
+		config.Theme = theme
+	}
+	if valid, border := ValidBorder(*borderf); valid {
+		config.Border = border
+	}
+	printables := SetValidPrintables(*fields)
+	if len(printables) != 0 {
+		config.Printables = printables
 	}
 }
 

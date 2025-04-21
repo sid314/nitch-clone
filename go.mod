@@ -9,6 +9,7 @@ require (
 	github.com/lucasb-eyer/go-colorful v1.2.0
 	github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/rivo/uniseg v0.4.7
+	github.com/spf13/pflag v1.0.6
 	golang.org/x/sys v0.31.0
 )
 

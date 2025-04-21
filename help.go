@@ -71,3 +71,11 @@ func HexToColor(hex Hex) *color.Color {
 	r, g, b := clr.RGB255()
 	return color.RGB(int(r), int(g), int(b))
 }
+
+func FieldsFromPrintableInfo(printables []PrintableInfo) []string {
+	var fields []string
+	for i := range printables {
+		fields = append(fields, printables[i].Field)
+	}
+	return fields
+}
