@@ -11,7 +11,7 @@ import (
 	"github.com/rivo/uniseg"
 )
 
-type Hex string
+type hex string
 
 func catpuccinToColor(namedColor catppuccin.Color) *color.Color {
 	r, g, b, _ := namedColor.RGBA()
@@ -20,7 +20,7 @@ func catpuccinToColor(namedColor catppuccin.Color) *color.Color {
 	return color
 }
 
-func largestFieldLength(disableColors bool, printables Printables) int {
+func largestFieldLength(disableColors bool, printables printables) int {
 	largestFieldLength := 0
 	if !disableColors {
 		largestFieldLength = 8
@@ -33,37 +33,37 @@ func largestFieldLength(disableColors bool, printables Printables) int {
 	return largestFieldLength
 }
 
-func SnipSnip(prefix string, suffix string, s string) string {
+func snipSnip(prefix string, suffix string, s string) string {
 	_, aftercut, _ := strings.Cut(s, prefix)
 	beforecut, _, _ := strings.Cut(aftercut, suffix)
 	return beforecut
 }
 
-func wrap(fieldsNumber int, palette Palette) Palette {
-	var newPalette Palette
+func wrap(fieldsNumber int, colors palette) palette {
+	var newPalette palette
 	for len(newPalette) <= fieldsNumber+1 {
-		newPalette = append(newPalette, palette...)
+		newPalette = append(newPalette, colors...)
 	}
 	return newPalette
 }
 
-func Mirror(palette Palette) Palette {
-	var newPalette Palette
-	for i := range palette {
-		newPalette = append(newPalette, palette[i])
-		newPalette = append(newPalette, palette[i])
+func mirror(colors palette) palette {
+	var newPalette palette
+	for i := range colors {
+		newPalette = append(newPalette, colors[i])
+		newPalette = append(newPalette, colors[i])
 	}
 	return newPalette
 }
 
-func Randomise(palette Palette) Palette {
-	rand.Shuffle(len(palette), func(i, j int) {
-		palette[i], palette[j] = palette[j], palette[i]
+func randomise(colors palette) palette {
+	rand.Shuffle(len(colors), func(i, j int) {
+		colors[i], colors[j] = colors[j], colors[i]
 	})
-	return palette
+	return colors
 }
 
-func HexToColor(hex Hex) *color.Color {
+func hexToColor(hex hex) *color.Color {
 	clr, err := colorful.Hex(string(hex))
 	if err != nil {
 		log.Fatal(err)
@@ -72,7 +72,7 @@ func HexToColor(hex Hex) *color.Color {
 	return color.RGB(int(r), int(g), int(b))
 }
 
-func FieldsFromPrintableInfo(printables Printables) []string {
+func fieldsFromPrintableInfo(printables printables) []string {
 	var fields []string
 	for i := range printables {
 		fields = append(fields, printables[i].Field)

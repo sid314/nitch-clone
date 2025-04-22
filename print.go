@@ -6,15 +6,15 @@ import (
 	"github.com/rivo/uniseg"
 )
 
-type PrintableInfo struct {
+type printableInfo struct {
 	Field string
 	Value string
 }
-type Printables []*PrintableInfo
+type printables []*printableInfo
 
-func Print() {
-	config := GetConfig()
-	theme := GenerateTheme(config)
+func print() {
+	config := getConfig()
+	theme := generateTheme(config)
 	printables := config.Printables
 	disableColors := config.DisableColors
 	length := largestFieldLength(config.DisableColors, printables)
@@ -93,7 +93,7 @@ func Print() {
 	theme.border.Printf("╯\n")
 }
 
-func padPrintables(printables Printables, requiredLength int) {
+func padPrintables(printables printables, requiredLength int) {
 	for i, printable := range printables {
 		for uniseg.StringWidth(printable.Field) < requiredLength+1 {
 			printable.Field = printable.Field + " "

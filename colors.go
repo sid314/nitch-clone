@@ -5,26 +5,26 @@ import (
 )
 
 type (
-	Palette []*color.Color
+	palette []*color.Color
 )
 
 type (
-	StyleName       string
-	ThemeName       string
-	BorderColorName string
-	Dot             string
-	Theme           struct {
-		name      ThemeName
-		colors    Palette
+	styleName       string
+	themeName       string
+	borderColorName string
+	symbol          string
+	theme           struct {
+		name      themeName
+		colors    palette
 		border    *color.Color
-		dot       Dot
+		dot       symbol
 		symmetric bool
 		random    bool
 	}
 )
 
-func GeneratePalette(theme ThemeName) Palette {
-	var colors Palette
+func generatePalette(theme themeName) palette {
+	var colors palette
 	switch theme {
 	case "catppuccin-mocha", "catppuccin-latte", "catppuccin-frappe", "catppuccin-macchiato":
 		colors = catpuccinPalette(theme)
@@ -41,16 +41,16 @@ func GeneratePalette(theme ThemeName) Palette {
 	return colors
 }
 
-func GenerateTheme(config *Config) *Theme {
-	var theme Theme
+func generateTheme(config *config) *theme {
+	var theme theme
 	theme.name = config.Theme
 	// theme.colors = GeneratePalette(config.Theme)
-	rawPalette := GeneratePalette(config.Theme)
+	rawPalette := generatePalette(config.Theme)
 	if config.Random {
-		rawPalette = Randomise(rawPalette)
+		rawPalette = randomise(rawPalette)
 	}
 	if config.Symmetric {
-		rawPalette = Mirror(rawPalette)
+		rawPalette = mirror(rawPalette)
 	}
 	theme.colors = wrap(len(config.Printables)*2, rawPalette)
 	switch config.Border {
@@ -59,18 +59,18 @@ func GenerateTheme(config *Config) *Theme {
 	case "none":
 		theme.border = color.RGB(0, 0, 0)
 	case "theme":
-		if isCatpuccin, flavour := IsCatppuccin(theme.name); isCatpuccin {
+		if isCatpuccin, flavour := isCatppuccin(theme.name); isCatpuccin {
 			theme.border = catpuccinToColor(flavour.Base())
 		} else {
 			switch config.Theme {
 			case "grayscale":
 				theme.border = color.RGB(255, 255, 255)
 			case "kanagawa-wave":
-				theme.border = HexToColor("#16161d")
+				theme.border = hexToColor("#16161d")
 			case "kanagawa-lotus":
-				theme.border = HexToColor("#1f1f28")
+				theme.border = hexToColor("#1f1f28")
 			case "kanagawa-dragon":
-				theme.border = HexToColor("#16161d")
+				theme.border = hexToColor("#16161d")
 			default:
 				theme.border = color.New(color.FgWhite)
 			}

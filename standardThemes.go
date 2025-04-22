@@ -2,14 +2,14 @@ package main
 
 import "github.com/fatih/color"
 
-func grayscalePalette() Palette {
-	var palette Palette
+func grayscalePalette() palette {
+	var palette palette
 	palette = append(palette, color.RGB(255, 255, 255))
 	return palette
 }
 
-func classicPalette() Palette {
-	var palette Palette
+func classicPalette() palette {
+	var palette palette
 	palette = append(palette, color.New(color.FgBlue))
 	palette = append(palette, color.New(color.FgRed))
 	palette = append(palette, color.New(color.FgYellow))
@@ -19,8 +19,8 @@ func classicPalette() Palette {
 	return palette
 }
 
-func highIntensityPalette() Palette {
-	var palette Palette
+func highIntensityPalette() palette {
+	var palette palette
 	palette = append(palette, color.New(color.FgHiBlue))
 	palette = append(palette, color.New(color.FgHiRed))
 	palette = append(palette, color.New(color.FgHiYellow))

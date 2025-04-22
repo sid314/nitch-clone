@@ -2,7 +2,7 @@ package main
 
 import catppuccin "github.com/catppuccin/go"
 
-func IsCatppuccin(theme ThemeName) (bool, catppuccin.Flavor) {
+func isCatppuccin(theme themeName) (bool, catppuccin.Flavor) {
 	switch theme {
 	case "catppuccin-mocha", "catppuccin-mocha-asymmetric":
 		return true, catppuccin.Mocha
@@ -17,9 +17,9 @@ func IsCatppuccin(theme ThemeName) (bool, catppuccin.Flavor) {
 	}
 }
 
-func catpuccinPalette(theme ThemeName) Palette {
+func catpuccinPalette(theme themeName) palette {
 	var flavour catppuccin.Flavor
-	var palette Palette
+	var palette palette
 	switch theme {
 	case "catppuccin-mocha":
 		flavour = catppuccin.Mocha

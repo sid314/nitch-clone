@@ -15,23 +15,23 @@ import (
 )
 
 type (
-	Hostname string
-	Username string
-	Distro   string
-	Kernel   string
-	Shell    string
-	Uptime   string
-	Desktop  string
-	Terminal string
-	Memory   int
-	Packages int
+	host     string
+	username string
+	distro   string
+	kernel   string
+	shell    string
+	uptime   string
+	desktop  string
+	term     string
+	memory   int
+	pkgs     int
 )
 
-func GetCurrentDesktop() Desktop {
-	return Desktop(os.Getenv("XDG_CURRENT_DESKTOP"))
+func getCurrentDesktop() desktop {
+	return desktop(os.Getenv("XDG_CURRENT_DESKTOP"))
 }
 
-func GetTerminal() Terminal {
+func getTerminal() term {
 	// First tries to read $TERM_PROGRAM
 	// If that returns an emty string,
 	// then tries to read $TERM
@@ -39,30 +39,30 @@ func GetTerminal() Terminal {
 	terminal := os.Getenv("TERM_PROGRAM")
 	terminal = strings.TrimSpace(terminal)
 	if terminal == "" {
-		return Terminal(os.Getenv("TERM"))
+		return term(os.Getenv("TERM"))
 	}
-	return Terminal(terminal)
+	return term(terminal)
 }
 
-func GetHostName() Hostname {
+func getHostName() host {
 	hostname, error := os.Hostname()
 	if error != nil {
 		log.Fatal(error)
 	}
-	return Hostname(hostname)
+	return host(hostname)
 }
 
-func GetUserName() Username {
+func getUserName() username {
 	user, error := user.Current()
 	if error != nil {
 		log.Fatal(error)
 	}
 
-	return Username(user.Username)
+	return username(user.Username)
 }
 
 // linux-specific
-func GetDistro() Distro {
+func getDistro() distro {
 	osReleaseBytes, error := os.ReadFile("/etc/os-release")
 
 	if error != nil {
@@ -70,10 +70,10 @@ func GetDistro() Distro {
 	}
 
 	osRelease := string(osReleaseBytes)
-	return Distro(SnipSnip("PRETTY_NAME=\"", "\"", osRelease))
+	return distro(snipSnip("PRETTY_NAME=\"", "\"", osRelease))
 }
 
-func GetKernel() Kernel {
+func getKernel() kernel {
 	u := unix.Utsname{}
 	err := unix.Uname(&u)
 	if err != nil {
@@ -81,10 +81,10 @@ func GetKernel() Kernel {
 	}
 	var buffer bytes.Buffer
 	buffer.Write(u.Release[:])
-	return Kernel(u.Release[:bytes.IndexByte(u.Release[:], 0)])
+	return kernel(u.Release[:bytes.IndexByte(u.Release[:], 0)])
 }
 
-func GetUptime() Uptime {
+func getUptime() uptime {
 	sysinfo := &unix.Sysinfo_t{}
 	if err := unix.Sysinfo(sysinfo); err != nil {
 		log.Fatal(err)
@@ -111,50 +111,50 @@ func GetUptime() Uptime {
 	if seconds > 0 {
 		builder.WriteString(fmt.Sprintf("%ds ", seconds))
 	}
-	return Uptime(builder.String())
+	return uptime(builder.String())
 }
 
-func GetShell() Shell {
+func getShell() shell {
 	shellPieces := strings.SplitAfter(os.Getenv("SHELL"), "/")
-	return Shell(shellPieces[len(shellPieces)-1])
+	return shell(shellPieces[len(shellPieces)-1])
 }
 
-func GetRawTotalMemory() Memory {
+func getRawTotalMemory() memory {
 	memInfoBytes, error := os.ReadFile("/proc/meminfo")
 	if error != nil {
 		log.Fatal(error)
 	}
 
 	meminfostring := string(memInfoBytes)
-	totalMemoryString := SnipSnip("MemTotal:", " kB", meminfostring)
+	totalMemoryString := snipSnip("MemTotal:", " kB", meminfostring)
 	totalMemoryString = strings.TrimSpace(totalMemoryString)
 	totalRawMemory, error := strconv.Atoi(totalMemoryString)
 	if error != nil {
 		log.Fatal(error)
 	}
 
-	return Memory(totalRawMemory)
+	return memory(totalRawMemory)
 }
 
-func GetRawFreeMemory() Memory {
+func getRawFreeMemory() memory {
 	memInfoBytes, error := os.ReadFile("/proc/meminfo")
 	if error != nil {
 		log.Fatal(error)
 	}
 
 	memInfoString := string(memInfoBytes)
-	totalmemorystring := SnipSnip("MemAvailable:", " kB", memInfoString)
+	totalmemorystring := snipSnip("MemAvailable:", " kB", memInfoString)
 	totalmemorystring = strings.TrimSpace(totalmemorystring)
 	totalRawMemory, error := strconv.Atoi(totalmemorystring)
 	if error != nil {
 		log.Fatal(error)
 	}
 
-	return Memory(totalRawMemory)
+	return memory(totalRawMemory)
 }
 
-func GetTotalMemory() Memory {
-	return Memory(GetRawTotalMemory() / 1024)
+func getTotalMemory() memory {
+	return memory(getRawTotalMemory() / 1024)
 }
 
 // To add a new package manager first add
@@ -162,7 +162,7 @@ func GetTotalMemory() Memory {
 // then add a case for it and add
 // whatever command it uses to list all installed
 // packages ON SEPARATE LINES
-func GetPackages() Packages {
+func getPackages() pkgs {
 	var command *exec.Cmd
 	packageManagers := []string{"pacman", "dnf", "rpm", "apt"}
 	var packageManager string
@@ -192,10 +192,10 @@ func GetPackages() Packages {
 
 	packages := string(packagesBytes)
 	lines := strings.Count(packages, "\n")
-	return Packages(lines)
+	return pkgs(lines)
 }
 
-func GetUsedMemory() Memory {
-	rawFreeMemory := GetRawTotalMemory() - GetRawFreeMemory()
-	return Memory(rawFreeMemory / 1024)
+func getUsedMemory() memory {
+	rawFreeMemory := getRawTotalMemory() - getRawFreeMemory()
+	return memory(rawFreeMemory / 1024)
 }
