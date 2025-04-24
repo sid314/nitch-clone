@@ -1,4 +1,4 @@
-theme = "6-colors"
+
 # themes can be
 # "catppuccin-mocha"
 # "catppuccin-frappe"
@@ -7,12 +7,31 @@ theme = "6-colors"
 # "grayscale"
 # "classic"
 # "high-intensity"
-border = "white"
+# "kanagawa-wave"
+# "kanagawa-lotus"
+# "kanagawa-dragon"
+theme = "kanagawa-dragon"
+
+
 # border can be "white", "none","theme"
-dot = ""
+border = "white"
+
 # dot can be any non whitespace string
+dot = "󰜪"
+
+#disale the symbols line
 disableColors = false
-# to disable last line
+
+# to enable slow printing
+slow = true
+
+# to randomise th order of colors
+random = false
+
+# to print the fields and values in the same color
+symmetric = true
+
+# these are all the available fields
 fields = [
   "user",
   "shell",
@@ -22,5 +41,6 @@ fields = [
   "uptime",
   "memory",
   "distro",
+  "de",
+  "term",
 ]
-# these are all the available fields for now

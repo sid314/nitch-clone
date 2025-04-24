@@ -8,7 +8,7 @@
   - [Building and running](#building-and-running)
   <!--toc:end-->
 
-## ![Screenschot](./screenshot.png)
+## ![Screenschot](./demo.gif)
 
 ---
 
@@ -18,10 +18,10 @@ This program is inspired by
 ## Key Differences from nitch
 
 - Written in Go
-- Different icons
+- Consistent (and different) icons
 - No word art (yet)
 - Themes
-- Fields can be disabled
+- Customizable
 
 ## Dependencies
 
@@ -33,17 +33,22 @@ Themes can be set through `config.toml`
 placed in `$XDG_HOME/nitch-clone`
 (It will be`~/.config/nitch-clone/config.toml` for most users).
 
-Currently 9 themes are available
+Run `nitch-clone -h` to see available options.
+The default options are set through your config and you can override
+them with cli flags.
+
+Currently 10 themes are available
 
 - catppuccin-mocha
 - catppuccin-frappe
 - catppuccin-latte
 - catppuccin-macchiato
 - grayscale
-- 6-colors
-- random-6-colors
-- 6-colors-high-intensity
-- random-6-colors-high-intensity
+- classic
+- high-intensity
+- kanagawa-wave
+- kanagawa-lotus
+- kanagawa-dragon
 
 The dots and border color can be set
 independently of the theme.
@@ -59,3 +64,9 @@ independently of the theme.
 2. Run `cd nitch-clone`
 3. Run `go build`
 4. Run `./nitch-clone` or add it to your path or copy it to `/usr/local/bin/`
+
+---
+
+or simply run `go install github.com/sid314/nitch-clone@latest`
+
+---
