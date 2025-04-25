@@ -77,7 +77,7 @@ func print() {
 		}
 		theme.border.Printf("│ ")
 		time.Sleep(delay)
-		for i := 0; i < 16; i += 2 {
+		for i := 0; i < len(theme.colors); i += 2 {
 			theme.colors[i].Printf("%s ", dot)
 			time.Sleep(delay)
 		}
