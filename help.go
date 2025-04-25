@@ -23,7 +23,7 @@ func catpuccinToColor(namedColor catppuccin.Color) *color.Color {
 func largestFieldLength(disableColors bool, printables printables) int {
 	largestFieldLength := 0
 	if !disableColors {
-		largestFieldLength = 8
+		largestFieldLength = 9
 	}
 	for _, printable := range printables {
 		if l := uniseg.StringWidth(printable.Field); l > largestFieldLength {
