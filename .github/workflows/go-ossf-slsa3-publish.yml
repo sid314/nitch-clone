@@ -1,5 +1,8 @@
 name: SLSA go releaser
 on:
+  release:
+    types:
+      - created
   workflow_dispatch:
   push:
     tags:
