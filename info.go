@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -167,11 +168,10 @@ func getPackages() pkgs {
 	packageManagers := []string{"pacman", "dnf", "rpm", "apt"}
 	var packageManager string
 	for i := range packageManagers {
-		maybePackageManager, _ := exec.Command("which", packageManagers[i]).Output()
-		if string(maybePackageManager) != "" {
+		_, err := exec.Command(packageManagers[i]).Output()
+		if !errors.Is(err, exec.ErrNotFound) {
 			packageManager = packageManagers[i]
 		}
-
 	}
 	switch packageManager {
 	case "pacman":
