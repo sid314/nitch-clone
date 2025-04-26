@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -78,35 +79,47 @@ var (
 )
 
 func getConfig() *config {
-	config := defaultConfig
 	configPath := xdg.ConfigHome + "/nitch-clone/config.toml"
 	configFile, err := os.ReadFile(configPath)
-	if err != nil {
-		return &config
+	if errors.Is(err, os.ErrNotExist) {
+		return setOverrides(&defaultConfig, parseFlags())
+	} else if err != nil {
+		return &defaultConfig
 	} else {
-		rawconfig := parseConfig(configFile)
-		// Whatever config option is defined in the config
-		// and is valid get read and overrides the default config
-		if valid, theme := validTheme(rawconfig.Theme); valid {
-			config.Theme = theme
-		}
-		if valid, border := validBorder(rawconfig.Border); valid {
-			config.Border = border
-		}
-		if valid, dot := validDot(rawconfig.Dot); valid {
-			config.Dot = dot
-		}
-		config.Printables = setValidPrintables(rawconfig.Fields)
-		config.DisableColors = rawconfig.DisableColors
-		config.Slow = rawconfig.Slow
-		config.Symmetric = rawconfig.Symmetric
-		config.Random = rawconfig.Random
-		parseFlags(&config)
-		return &config
+		return setOverrides(ParseConfig([]byte(configFile)), parseFlags())
 	}
 }
 
-func parseFlags(config *config) {
+func setOverrides(file, flags *config) *config {
+	if pflag.CommandLine.Changed("slow") {
+		file.Slow = flags.Slow
+	}
+	if pflag.CommandLine.Changed("random") {
+		file.Random = flags.Random
+	}
+	if pflag.CommandLine.Changed("symmetric") {
+		file.Symmetric = flags.Symmetric
+	}
+	if pflag.CommandLine.Changed("disableColors") {
+		file.DisableColors = flags.DisableColors
+	}
+	if pflag.CommandLine.Changed("theme") {
+		file.Theme = flags.Theme
+	}
+	if pflag.CommandLine.Changed("border") {
+		file.Border = flags.Border
+	}
+	if pflag.CommandLine.Changed("fields") {
+		file.Printables = flags.Printables
+	}
+	if pflag.CommandLine.Changed("dot") {
+		file.Dot = flags.Dot
+	}
+	return file
+}
+
+func parseFlags() *config {
+	config := defaultConfig
 	slow := pflag.BoolP("slow", "s", config.Slow, "print slowly")
 	pflag.Lookup("slow").NoOptDefVal = "true"
 	random := pflag.BoolP("random", "r", config.Random, "randomise colors")
@@ -137,6 +150,7 @@ func parseFlags(config *config) {
 	if len(printables) != 0 {
 		config.Printables = printables
 	}
+	return &config
 }
 
 func setValidPrintables(fields []string) printables {
@@ -171,12 +185,12 @@ func setValidPrintables(fields []string) printables {
 	return printables
 }
 
-func parseConfig(in []byte) *rawConfig {
+func ParseConfig(in []byte) *config {
 	var v rawConfig
 	if err := toml.Unmarshal(in, &v); err != nil {
 		log.Fatal(err)
 	}
-	return &rawConfig{
+	rawconfig := rawConfig{
 		Theme:         v.Theme,
 		Border:        v.Border,
 		Dot:           v.Dot,
@@ -186,6 +200,24 @@ func parseConfig(in []byte) *rawConfig {
 		Symmetric:     v.Symmetric,
 		Random:        v.Random,
 	}
+	config := defaultConfig
+	if valid, theme := validTheme(rawconfig.Theme); valid {
+		config.Theme = theme
+	}
+	if valid, border := validBorder(rawconfig.Border); valid {
+		config.Border = border
+	}
+	if valid, dot := validDot(rawconfig.Dot); valid {
+		config.Dot = dot
+	}
+	if len(rawconfig.Fields) != 0 {
+		config.Printables = setValidPrintables(rawconfig.Fields)
+	}
+	config.DisableColors = rawconfig.DisableColors
+	config.Slow = rawconfig.Slow
+	config.Symmetric = rawconfig.Symmetric
+	config.Random = rawconfig.Random
+	return &config
 }
 
 func validTheme(theme string) (bool, themeName) {
