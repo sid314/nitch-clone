@@ -67,7 +67,7 @@ func getDistro() distro {
 	osReleaseBytes, error := os.ReadFile("/etc/os-release")
 
 	if error != nil {
-		log.Fatal(error)
+		return (distro("linux"))
 	}
 
 	osRelease := string(osReleaseBytes)
