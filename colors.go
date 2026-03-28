@@ -34,6 +34,8 @@ func generatePalette(theme themeName) palette {
 		colors = highIntensityPalette()
 	case "kanagawa-wave", "kanagawa-lotus", "kanagawa-dragon":
 		colors = kanagawaPalette(theme)
+	case "icy-neon":
+		colors = icyNeonPalette()
 	default:
 		colors = grayscalePalette()
 
@@ -71,6 +73,8 @@ func generateTheme(config *config) *theme {
 				theme.border = hexToColor("#1f1f28")
 			case "kanagawa-dragon":
 				theme.border = hexToColor("#16161d")
+			case "icy-neon":
+				theme.border = hexToColor("#0A1520")
 			default:
 				theme.border = color.New(color.FgWhite)
 			}

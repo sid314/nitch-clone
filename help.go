@@ -79,3 +79,21 @@ func fieldsFromPrintableInfo(printables printables) []string {
 	}
 	return fields
 }
+
+func icyNeonPalette() palette {
+	var palette palette
+	palette = append(palette, hexToColor("#5AC8D8"))
+	palette = append(palette, hexToColor("#DD8899"))
+	palette = append(palette, hexToColor("#66DD88"))
+	palette = append(palette, hexToColor("#E0BB55"))
+	palette = append(palette, hexToColor("#66CCEE"))
+	palette = append(palette, hexToColor("#DD8899"))
+	palette = append(palette, hexToColor("#5AC8D8"))
+	palette = append(palette, hexToColor("#FFAACC"))
+	palette = append(palette, hexToColor("#88FFAA"))
+	palette = append(palette, hexToColor("#F0DD77"))
+	palette = append(palette, hexToColor("#88EEFF"))
+	palette = append(palette, hexToColor("#FFAACC"))
+	palette = append(palette, hexToColor("#5AC8D8"))
+	return palette
+}

@@ -60,6 +60,7 @@ var (
 		"kanagawa-wave",
 		"kanagawa-lotus",
 		"grayscale",
+		"icy-neon",
 	}
 	validBorders = []string{
 		"none",

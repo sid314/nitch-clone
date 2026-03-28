@@ -10,7 +10,8 @@
 # "kanagawa-wave"
 # "kanagawa-lotus"
 # "kanagawa-dragon"
-theme = "kanagawa-dragon"
+# "icy-neon"
+theme = "icy-neon"
 
 
 # border can be "white", "none","theme"
